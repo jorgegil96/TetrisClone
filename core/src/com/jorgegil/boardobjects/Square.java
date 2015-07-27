@@ -1,0 +1,27 @@
+package com.jorgegil.boardobjects;
+
+import com.badlogic.gdx.math.Vector2;
+
+/**
+ * Created by jorgegil on 7/27/15.
+ */
+public class Square {
+    
+    private Vector2 position;
+
+    public Square (float x, float y) {
+        position = new Vector2(x, y);
+    }
+
+    public void fall(float delta) {
+        position.add(0, 25);
+    }
+
+    public float getX() {
+        return position.x;
+    }
+
+    public float getY() {
+        return position.y;
+    }
+}
