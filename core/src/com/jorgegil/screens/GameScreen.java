@@ -1,6 +1,7 @@
 package com.jorgegil.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.jorgegil.boardobjects.Square;
 import com.jorgegil.gameboard.GameBoard;
@@ -15,7 +16,7 @@ public class GameScreen implements Screen{
 
     private GameBoard board;
     private GameRenderer renderer;
-    private float runTime = 0, dropTime = 1;
+    private float runTime = 0, dropTime = 1, moveTime = 0.2f;
 
     public GameScreen() {
 
@@ -33,6 +34,27 @@ public class GameScreen implements Screen{
     public void render(float delta) {
         runTime += delta;
         dropTime -= delta;
+        moveTime -= delta;
+        //System.out.println(runTime);
+
+        if(Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT)){
+            if (moveTime <= 0) {
+                board.moveLeft();
+                moveTime = 0.2f;
+            }
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT)){
+            if (moveTime <= 0) {
+                board.moveRight();
+                moveTime = 0.2f;
+            }
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.DPAD_DOWN)){
+            if (moveTime <= 0) {
+                board.moveDown();
+                moveTime = 0.2f;
+            }
+        }
 
         if(dropTime <= 0) {
             board.update(delta);

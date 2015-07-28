@@ -15,8 +15,12 @@ public class Square {
         this.color = color;
     }
 
-    public void fall(float delta) {
+    public void fall() {
         position.add(0, 25);
+    }
+
+    public void move(float x) {
+        position.add(x, 0);
     }
 
     public float getX() {
