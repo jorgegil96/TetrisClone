@@ -3,7 +3,7 @@ package com.jorgegil.tetris;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.jorgegil.screens.GameScreen;
-import com.jorgegil.zbHelpers.AssetLoader;
+import com.jorgegil.tgHelpers.AssetLoader;
 
 public class TetrisGame extends Game {
 	

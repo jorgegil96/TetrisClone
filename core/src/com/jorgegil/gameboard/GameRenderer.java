@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.jorgegil.boardobjects.Square;
-import com.jorgegil.zbHelpers.AssetLoader;
+import com.jorgegil.tgHelpers.AssetLoader;
 
 import java.util.ArrayList;
 
@@ -43,6 +43,7 @@ public class GameRenderer {
     public void render(float runTime) {
 
         ArrayList<Square> squares = myBoard.getSquares();
+        ArrayList<Square> tetrominoe = myBoard.getTetrominoe();
 
         // Fill the entire screen with black, to prevent potential flickering.
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -67,7 +68,11 @@ public class GameRenderer {
         //batcher.draw(AssetLoader.pieceI, 25, 0, 25 / 2, 25 / 2);
 
         for(Square s : squares) {
-            batcher.draw(AssetLoader.pieceI, s.getX(), s.getY(), 25, 25);
+            batcher.draw(AssetLoader.colors.get(s.getColor()), s.getX(), s.getY(), 25, 25);
+        }
+
+        for(Square s : tetrominoe) {
+            batcher.draw(AssetLoader.colors.get(s.getColor()), s.getX(), s.getY(), 25, 25);
         }
 
         // The bird needs transparency, so we enable that again.

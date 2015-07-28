@@ -8,9 +8,11 @@ import com.badlogic.gdx.math.Vector2;
 public class Square {
     
     private Vector2 position;
+    private int color;
 
-    public Square (float x, float y) {
+    public Square (float x, float y, int color) {
         position = new Vector2(x, y);
+        this.color = color;
     }
 
     public void fall(float delta) {
@@ -23,5 +25,9 @@ public class Square {
 
     public float getY() {
         return position.y;
+    }
+
+    public int getColor() {
+        return color;
     }
 }
