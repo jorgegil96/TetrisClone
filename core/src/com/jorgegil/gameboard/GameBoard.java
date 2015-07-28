@@ -4,6 +4,7 @@ import com.jorgegil.boardobjects.Square;
 import com.jorgegil.boardobjects.Tetrominoe;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 
 /**
@@ -17,7 +18,6 @@ public class GameBoard {
 
 
     public GameBoard() {
-
         // Create and fill board with false values
         board = new boolean[20][10];
         for(int i = 0; i < board.length; i++) {
@@ -58,6 +58,7 @@ public class GameBoard {
                 int j = (int) s.getX() / 25;
                 board[i][j] = true;
             }
+            checkForLine();
             spawnTetrominoe();
         }
     }
@@ -185,6 +186,62 @@ public class GameBoard {
         if(pieceCanMoveDown) {
             for (Square s : tetrominoe)
                 s.fall();
+        }
+    }
+
+    public void checkForLine () {
+        for(int i = 0; i < board.length; i++) {
+
+            boolean lineCompleted = true;
+
+            for (int j = 0; j < board[0].length; j++) {
+                if(!board[i][j]) {
+                    lineCompleted = false;
+                }
+            }
+
+            if(lineCompleted)
+                moveAllDown(i);
+        }
+    }
+
+    public void moveAllDown(int line) {
+
+        /* Gets all Squares on "squares" ArrayList, if the square is above line it falls down
+            if it is in the same line as "line" it gets deleted from ArrayList
+         */
+        for (Iterator<Square> it = squares.iterator(); it.hasNext(); ) {
+            Square s = it.next();
+            int i = (int) s.getY() / 25;
+
+            if(i < line) {
+                s.fall();
+            }
+
+            if(i == line) {
+                it.remove();
+            }
+        }
+
+        for(int i = line; i >= 0; i--) {
+            for(int j = 0; j < board[i].length; j++) {
+                if(i < line) {
+                    board[i + 1][j] = board[i][j];
+                }
+                if(i == 0 || i == line) {
+                    board[i][j] = false;
+                }
+            }
+        }
+    }
+
+    public void printBoard() {
+        for(int i = 0; i < board.length; i++) {
+            System.out.print(i + " - ");
+            for(int j = 0; j < board[i].length; j++) {
+                System.out.print(board[i][j] + " | ");
+            }
+            System.out.println("");
         }
     }
 }
