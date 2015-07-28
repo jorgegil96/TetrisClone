@@ -135,11 +135,8 @@ public class GameBoard {
         }
 
         if(pieceCanMoveRight) {
-            System.out.println("right");
             for (Square s : tetrominoe) {
                 s.move(25);
-
-                s.printCoords();
             }
 
         }
@@ -167,11 +164,8 @@ public class GameBoard {
         }
 
         if(pieceCanMoveLeft) {
-            System.out.println("to left");
             for (Square s : tetrominoe) {
                 s.move(-25);
-
-                s.printCoords();
             }
         }
     }
@@ -198,82 +192,67 @@ public class GameBoard {
         }
 
         if(pieceCanMoveDown) {
-            System.out.println("downed");
             for (Square s : tetrominoe) {
                 s.fall();
-
-                s.printCoords();
             }
         }
     }
 
-    public void rotateCW() {
+    public void rotate(int w) { // 0 -> CW, 1 -> CCW
         boolean pieceCanRotate = true;
 
-
-
+        // Stores current coordinates of shape (i, j)
         ArrayList<Point> coordinates = new ArrayList<Point>();
+
+        // Store dif in square coord between old and new coords
         ArrayList<Point> difCoordinates = new ArrayList<Point>();
 
+        // Get current coordinates of shape
         for (int i = 0; i < tetriminoShape2.length; i++) {
             for (int j = 0; j < tetriminoShape2[i].length; j++) {
                 if (tetriminoShape2[i][j]) {
                     coordinates.add(new Point(i, j));
-                    System.out.println("cooI => " + i);
-                    System.out.println("cooJ => " + j);
                 }
             }
         }
 
-        printShape();
         transpose();
-        reverseRow();
+        if(w == 0) reverseRow(); // Clockwise
+        else reverseCol();       // Counter Clock Wise
 
         int count = 0;
-
-        printShape();
+        // Iterates new rotated shape
         for (int i = 0; i < tetriminoShape2.length; i++) {
             for (int j = 0; j < tetriminoShape2[i].length; j++) {
-                if (tetriminoShape2[i][j]) {
+                if (tetriminoShape2[i][j]) { // if cell is true
 
-
+                    // previous shape coordinates
                     int prevI = (int) coordinates.get(count).getX();
                     int prevJ = (int) coordinates.get(count).getY();
 
-                    System.out.println("prevI => " + prevI);
-                    System.out.println("prevJ => " + prevJ);
-
+                    // difference between new and previous coordinates of cell
                     int difI = i - prevI;
                     int difJ = j - prevJ;
 
-                    System.out.println("difI => " + difI);
-                    System.out.println("difJ => " + difJ);
-
+                    // new coordinates of shape
                     int newI = prevI + difI;
                     int newJ = prevJ + difJ;
 
-
-
-                    System.out.println("newI => " + newI);
-                    System.out.println("newJ => " + newJ);
-
-                    tetrominoe.get(count).printCoords();
-
+                    // new coordinates of square
                     int fixedI = (int) (tetrominoe.get(count).getY() / 25) + difI;
                     int fixedJ = (int) (tetrominoe.get(count).getX() / 25) + difJ;
 
-                    System.out.println("fixI => " + fixedI);
-                    System.out.println("fixJ => " + fixedJ);
-
-                    if(fixedJ < 0 || fixedJ > 9 || fixedI < 0 || fixedI > 19) {
+                    // check if new coordinates of square are valid, if not set rotate to false
+                    if(fixedJ < 0 || fixedJ > 9 || fixedI < 0 || fixedI > 19) { // check for border collision
                         pieceCanRotate = false;
                     }
                     else {
-                        if (board[newI][newJ]) {
+                        if (board[newI][newJ]) { //check for neighboring squares collision
                             pieceCanRotate = false;
                         }
                     }
 
+                    // Add the difference of square coordinates to arraylist
                     difCoordinates.add(new Point(difI * 25, difJ * 25));
 
                     count++;
@@ -283,26 +262,22 @@ public class GameBoard {
 
         int count2 = 0;
         if(pieceCanRotate) {
-            System.out.println("rotate");
             for (Square s : tetrominoe) {
-                s.printCoords();
 
+                //get difference to add/substract to square
                 int difJ = (int) difCoordinates.get(count2).getX();
                 int difI = (int) difCoordinates.get(count2).getY();
 
                 s.rotate(difI, difJ);
                 count2++;
-
-                s.printCoords();
             }
-            //printShape();
             difCoordinates.clear();
         }
-        else {
+        else { //if rotate not allowed return new shape to old shape (rotate -90º)
             transpose();
-            reverseCol();
+            if(w == 0) reverseCol();
+            else reverseRow();
         }
-
     }
 
     public void copyArray() {
