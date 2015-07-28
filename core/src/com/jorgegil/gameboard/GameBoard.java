@@ -3,6 +3,7 @@ package com.jorgegil.gameboard;
 import com.jorgegil.boardobjects.Square;
 import com.jorgegil.boardobjects.Tetrominoe;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
@@ -12,10 +13,10 @@ import java.util.Random;
  */
 public class GameBoard {
 
-    private boolean[][] board;
+    private boolean[][] board, tetrominoeShape, tetriminoShape2;
     private ArrayList<Square> squares;
     private ArrayList<Square> tetrominoe;
-
+    private int num;
 
     public GameBoard() {
         // Create and fill board with false values
@@ -87,10 +88,12 @@ public class GameBoard {
 
         // Random num (0 - 6) to choose Shape and Color of new tetrominoe
         Random rd = new Random();
-        int num = rd.nextInt(7);
+        num = rd.nextInt(7);
 
         // Gets new tetrominoe shape
-        boolean[][] tetrominoeShape = Tetrominoe.getShape(num);
+        tetrominoeShape = Tetrominoe.getShape(num);
+        tetriminoShape2 = new boolean[tetrominoeShape.length][tetrominoeShape.length];
+        copyArray();
 
         int maxCol = 0;
         //gets max # of cols
@@ -189,6 +192,109 @@ public class GameBoard {
         }
     }
 
+    public void rotateCW() {
+        boolean pieceCanRotate = true;
+
+
+
+        ArrayList<Point> coordinates = new ArrayList<Point>();
+        ArrayList<Point> difCoordinates = new ArrayList<Point>();
+
+        for (int i = 0; i < tetriminoShape2.length; i++) {
+            for (int j = 0; j < tetriminoShape2[i].length; j++) {
+                if (tetriminoShape2[i][j]) {
+                    coordinates.add(new Point(i, j));
+                }
+            }
+        }
+
+
+        transpose();
+        reverseCol();
+
+        int count = 0;
+
+        for (int i = 0; i < tetriminoShape2.length; i++) {
+            for (int j = 0; j < tetriminoShape2[i].length; j++) {
+                if (tetriminoShape2[i][j]) {
+                    int prevI = (int) coordinates.get(count).getX();
+                    int prevJ = (int) coordinates.get(count).getY();
+
+                    int difI = i - prevI;
+                    int difJ = j - prevJ;
+
+                    int newI = (int) (tetrominoe.get(count).getY() / 25) + difI;
+                    int newJ = (int) (tetrominoe.get(count).getX() / 25) + difJ;
+
+                    System.out.println((int) (tetrominoe.get(count).getY() / 25) + " - " +newI);
+                    System.out.println((int) (tetrominoe.get(count).getX() / 25) + " - " +newJ);
+
+                    if(newJ < 0 || newJ > 9 || newI < 0 || newI > 19) {
+                        pieceCanRotate = false;
+                    }
+                    else {
+                        if (board[newI][newJ]) {
+                            pieceCanRotate = false;
+                        }
+                    }
+
+                    System.out.println(pieceCanRotate + " ? ");
+
+                    difCoordinates.add(new Point(difI * 25, difJ * 25));
+
+                    //tetrominoe.get(count).rotate(difJ * 25, difI * 25);
+
+                    count++;
+                }
+            }
+        }
+
+        int count2 = 0;
+        if(pieceCanRotate) {
+            for (Square s : tetrominoe) {
+                int difY = (int) difCoordinates.get(count2).getX();
+                int difX = (int) difCoordinates.get(count2).getY();
+
+                s.rotate(difX, difY);
+                count2++;
+            }
+        }
+
+    }
+
+    public void copyArray() {
+        for(int i = 0; i < tetrominoeShape.length; i++) {
+            for (int j = 0; j < tetrominoeShape[i].length; j++) {
+                tetriminoShape2[i][j] = tetrominoeShape[i][j];
+            }
+        }
+    }
+
+    public void transpose() {
+        for(int i = 0; i < tetriminoShape2.length; i++) {
+            for (int j = 0; j < tetriminoShape2[i].length; j++) {
+                if(i != j) {
+                    boolean hold = tetriminoShape2[i][j];
+                    tetriminoShape2[i][j] = tetriminoShape2[j][i];
+                    tetriminoShape2[j][i] = hold;
+                }
+                else {
+                    break;
+                }
+            }
+        }
+    }
+
+    public void reverseCol() {
+        for (int i = 0; i < tetriminoShape2.length; i++) {
+            for (int j = 0; j < tetriminoShape2[i].length / 2; j++) {
+                boolean hold = tetriminoShape2[i][j];
+                tetriminoShape2[i][j] = tetriminoShape2[i][tetriminoShape2[i].length - 1 - j];
+                tetriminoShape2[i][tetriminoShape2[i].length - 1 - j] = hold;
+            }
+        }
+    }
+
     public void checkForLine () {
         for(int i = 0; i < board.length; i++) {
 
@@ -240,6 +346,15 @@ public class GameBoard {
             System.out.print(i + " - ");
             for(int j = 0; j < board[i].length; j++) {
                 System.out.print(board[i][j] + " | ");
+            }
+            System.out.println("");
+        }
+    }
+
+    public void printShape() {
+        for (int i = 0; i < tetrominoeShape.length; i++) {
+            for (int j = 0; j < tetrominoeShape[i].length; j++) {
+                System.out.print(tetrominoeShape[i][j] + " | ");
             }
             System.out.println("");
         }

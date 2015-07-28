@@ -27,6 +27,10 @@ public class Square {
         return position.x;
     }
 
+    public void rotate(float x, float y) {
+        position.add(x, y);
+    }
+
     public float getY() {
         return position.y;
     }
