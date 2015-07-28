@@ -51,7 +51,7 @@ public class GameBoard {
             for (Square s : tetrominoe)
                 if (canSquareFall(s.getX(), s.getY())) {
                     s.fall();
-                    System.out.println("fall");
+                    //System.out.println("fall");
                 }
         }
         else {
@@ -135,10 +135,13 @@ public class GameBoard {
         }
 
         if(pieceCanMoveRight) {
+            System.out.println("right");
             for (Square s : tetrominoe) {
                 s.move(25);
-                System.out.println("right");
+
+                s.printCoords();
             }
+
         }
     }
 
@@ -164,9 +167,11 @@ public class GameBoard {
         }
 
         if(pieceCanMoveLeft) {
+            System.out.println("to left");
             for (Square s : tetrominoe) {
                 s.move(-25);
-                System.out.println("to left");
+
+                s.printCoords();
             }
         }
     }
@@ -193,9 +198,11 @@ public class GameBoard {
         }
 
         if(pieceCanMoveDown) {
+            System.out.println("downed");
             for (Square s : tetrominoe) {
                 s.fall();
-                System.out.println("downed");
+
+                s.printCoords();
             }
         }
     }
@@ -212,32 +219,53 @@ public class GameBoard {
             for (int j = 0; j < tetriminoShape2[i].length; j++) {
                 if (tetriminoShape2[i][j]) {
                     coordinates.add(new Point(i, j));
+                    System.out.println("cooI => " + i);
+                    System.out.println("cooJ => " + j);
                 }
             }
         }
 
-
+        printShape();
         transpose();
-        reverseCol();
+        reverseRow();
 
         int count = 0;
 
+        printShape();
         for (int i = 0; i < tetriminoShape2.length; i++) {
             for (int j = 0; j < tetriminoShape2[i].length; j++) {
                 if (tetriminoShape2[i][j]) {
+
+
                     int prevI = (int) coordinates.get(count).getX();
                     int prevJ = (int) coordinates.get(count).getY();
+
+                    System.out.println("prevI => " + prevI);
+                    System.out.println("prevJ => " + prevJ);
 
                     int difI = i - prevI;
                     int difJ = j - prevJ;
 
-                    int newI = (int) (tetrominoe.get(count).getY() / 25) + difI;
-                    int newJ = (int) (tetrominoe.get(count).getX() / 25) + difJ;
+                    System.out.println("difI => " + difI);
+                    System.out.println("difJ => " + difJ);
 
-                    //System.out.println((int) (tetrominoe.get(count).getY() / 25) + " - " +newI);
-                    //System.out.println((int) (tetrominoe.get(count).getX() / 25) + " - " +newJ);
+                    int newI = prevI + difI;
+                    int newJ = prevJ + difJ;
 
-                    if(newJ < 0 || newJ > 9 || newI < 0 || newI > 19) {
+
+
+                    System.out.println("newI => " + newI);
+                    System.out.println("newJ => " + newJ);
+
+                    tetrominoe.get(count).printCoords();
+
+                    int fixedI = (int) (tetrominoe.get(count).getY() / 25) + difI;
+                    int fixedJ = (int) (tetrominoe.get(count).getX() / 25) + difJ;
+
+                    System.out.println("fixI => " + fixedI);
+                    System.out.println("fixJ => " + fixedJ);
+
+                    if(fixedJ < 0 || fixedJ > 9 || fixedI < 0 || fixedI > 19) {
                         pieceCanRotate = false;
                     }
                     else {
@@ -255,15 +283,24 @@ public class GameBoard {
 
         int count2 = 0;
         if(pieceCanRotate) {
+            System.out.println("rotate");
             for (Square s : tetrominoe) {
-                int difY = (int) difCoordinates.get(count2).getX();
-                int difX = (int) difCoordinates.get(count2).getY();
+                s.printCoords();
 
-                s.rotate(difX, difY);
+                int difJ = (int) difCoordinates.get(count2).getX();
+                int difI = (int) difCoordinates.get(count2).getY();
+
+                s.rotate(difI, difJ);
                 count2++;
-                System.out.println("rotated");
+
+                s.printCoords();
             }
             //printShape();
+            difCoordinates.clear();
+        }
+        else {
+            transpose();
+            reverseCol();
         }
 
     }
@@ -291,12 +328,22 @@ public class GameBoard {
         }
     }
 
-    public void reverseCol() {
+    public void reverseRow() {
         for (int i = 0; i < tetriminoShape2.length; i++) {
             for (int j = 0; j < tetriminoShape2[i].length / 2; j++) {
                 boolean hold = tetriminoShape2[i][j];
                 tetriminoShape2[i][j] = tetriminoShape2[i][tetriminoShape2[i].length - 1 - j];
                 tetriminoShape2[i][tetriminoShape2[i].length - 1 - j] = hold;
+            }
+        }
+    }
+
+    public void reverseCol() {
+        for (int i = 0; i < tetriminoShape2.length / 2; i++) {
+            for (int j = 0; j < tetriminoShape2[i].length; j++) {
+                boolean hold = tetriminoShape2[i][j];
+                tetriminoShape2[i][j] = tetriminoShape2[tetriminoShape2.length - 1 - i][j];
+                tetriminoShape2[tetriminoShape2.length - 1 - i][j] = hold;
             }
         }
     }

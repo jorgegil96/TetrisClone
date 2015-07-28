@@ -38,4 +38,9 @@ public class Square {
     public int getColor() {
         return color;
     }
+
+    public void printCoords() {
+        System.out.println(getX() + ", " + getY());
+
+    }
 }
