@@ -19,13 +19,13 @@ public class AssetLoader {
         texture = new Texture(Gdx.files.internal("data/tetris.png"));
         texture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
-        pieceI = new TextureRegion(texture, 0, 0, 25, 25);
-        pieceO = new TextureRegion(texture, 25, 0, 25, 25);
-        pieceT = new TextureRegion(texture, 50, 0, 25, 25);
-        pieceJ = new TextureRegion(texture, 75, 0, 25, 25);
-        pieceL = new TextureRegion(texture, 100, 0, 25, 25);
-        pieceS = new TextureRegion(texture, 125, 0, 25, 25);
-        pieceZ = new TextureRegion(texture, 150, 0, 25, 25);
+        pieceI = new TextureRegion(texture, 150, 0, 25, 25);
+        pieceO = new TextureRegion(texture, 50, 0, 25, 25);
+        pieceT = new TextureRegion(texture, 100, 0, 25, 25);
+        pieceJ = new TextureRegion(texture, 0, 0, 25, 25);
+        pieceL = new TextureRegion(texture, 125, 0, 25, 25);
+        pieceS = new TextureRegion(texture, 75, 0, 25, 25);
+        pieceZ = new TextureRegion(texture, 25, 0, 25, 25);
 
         colors = new ArrayList<TextureRegion>();
         colors.add(pieceI);

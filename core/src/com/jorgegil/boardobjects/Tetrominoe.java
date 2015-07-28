@@ -6,10 +6,7 @@ package com.jorgegil.boardobjects;
 public class Tetrominoe {
 
     private static boolean[][] I_PIECE = {
-            {true},
-            {true},
-            {true},
-            {true}
+            {true, true, true, true}
     };
 
     private static boolean[][] O_PIECE = {

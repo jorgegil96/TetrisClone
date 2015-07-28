@@ -16,7 +16,7 @@ public class GameScreen implements Screen{
 
     private GameBoard board;
     private GameRenderer renderer;
-    private float runTime = 0, dropTime = 1, moveTime = 0.2f;
+    private float runTime = 0, dropTime = 1, moveTime = 0.1f;
 
     public GameScreen() {
 
@@ -40,19 +40,19 @@ public class GameScreen implements Screen{
         if(Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT)){
             if (moveTime <= 0) {
                 board.moveLeft();
-                moveTime = 0.2f;
+                moveTime = 0.1f;
             }
         }
         if(Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT)){
             if (moveTime <= 0) {
                 board.moveRight();
-                moveTime = 0.2f;
+                moveTime = 0.1f;
             }
         }
         if(Gdx.input.isKeyPressed(Input.Keys.DPAD_DOWN)){
             if (moveTime <= 0) {
                 board.moveDown();
-                moveTime = 0.2f;
+                moveTime = 0.1f;
             }
         }
 
