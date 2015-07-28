@@ -3,11 +3,8 @@ package com.jorgegil.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.jorgegil.boardobjects.Square;
 import com.jorgegil.gameboard.GameBoard;
 import com.jorgegil.gameboard.GameRenderer;
-
-import java.util.ArrayList;
 
 /**
  * Created by jorgegil on 7/27/15.
@@ -28,6 +25,7 @@ public class GameScreen implements Screen{
         int midPointY = (int) (gameHeight / 2);
         board = new GameBoard();
         renderer = new GameRenderer(board, (int) gameHeight, midPointY);
+
     }
 
     @Override

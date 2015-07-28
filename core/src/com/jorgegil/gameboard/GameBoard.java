@@ -2,6 +2,7 @@ package com.jorgegil.gameboard;
 
 import com.jorgegil.boardobjects.Square;
 import com.jorgegil.boardobjects.Tetrominoe;
+import com.jorgegil.tgHelpers.AssetLoader;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -33,6 +34,8 @@ public class GameBoard {
         tetrominoe = new ArrayList<Square>();
 
         spawnTetrominoe();
+
+        AssetLoader.music.loop();
     }
 
     public void update(float delta) {
