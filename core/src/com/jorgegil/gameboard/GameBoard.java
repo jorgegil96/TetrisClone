@@ -273,6 +273,24 @@ public class GameBoard {
         }
     }
 
+    public void hardDrop() {
+        boolean pieceCanMoveDown = true;
+
+        while (pieceCanMoveDown) {
+            for (Square s : tetrominoe) {
+                if (!canSquareFall(s.getX(), s.getY())) {
+                    pieceCanMoveDown = false;
+                }
+            }
+            if(pieceCanMoveDown) {
+                for (Square s : tetrominoe) {
+                    s.fall();
+                }
+            }
+        }
+
+    }
+
     public void rotate(int w) { // 0 -> CW, 1 -> CCW
         boolean pieceCanRotate = true;
 

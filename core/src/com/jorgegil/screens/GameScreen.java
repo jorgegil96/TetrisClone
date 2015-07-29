@@ -73,6 +73,9 @@ public class GameScreen implements Screen{
                 }
 
             }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                board.hardDrop();
+            }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
             if(board.isPaused()) {
