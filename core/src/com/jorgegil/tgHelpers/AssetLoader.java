@@ -3,6 +3,7 @@ package com.jorgegil.tgHelpers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ public class AssetLoader {
     public static TextureRegion pieceI, pieceO, pieceT, pieceJ, pieceL, pieceS, pieceZ;
     public static ArrayList<TextureRegion> colors;
     public static Sound music;
+    public static BitmapFont font;
 
     public static void load() {
         texture = new Texture(Gdx.files.internal("data/tetris.png"));
@@ -40,10 +42,14 @@ public class AssetLoader {
 
         music = Gdx.audio.newSound(Gdx.files.internal("data/music.mp3"));
 
+        font = new BitmapFont(Gdx.files.internal("data/text.fnt"), false);
+        font.getData().setScale(.1f, -.1f);
+
     }
 
     public static void dispose() {
         // We must dispose of the texture when we are finished.
         texture.dispose();
+        font.dispose();
     }
 }

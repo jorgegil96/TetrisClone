@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.jorgegil.boardobjects.Square;
@@ -22,22 +23,24 @@ public class GameRenderer {
 
     private SpriteBatch batcher;
 
-    private int midPointY, gameHeight;
+    private int gameHeight, veticalBar;
 
-    public GameRenderer(GameBoard board, int gameHeight, int midPointY) {
+    public GameRenderer(GameBoard board, int gameHeight) {
         myBoard = board;
 
         this.gameHeight = gameHeight;
-        this.midPointY = midPointY;
+        veticalBar = (gameHeight - 200) / 2;
 
         cam = new OrthographicCamera();
-        cam.setToOrtho(true, 250, 500);
+        cam.setToOrtho(true, 160, gameHeight);
 
         batcher = new SpriteBatch();
         batcher.setProjectionMatrix(cam.combined);
 
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(cam.combined);
+
+
     }
 
     public void render(float runTime) {
@@ -52,9 +55,25 @@ public class GameRenderer {
         // Begin ShapeRenderer
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
+        // Draw Border Colors
+        shapeRenderer.setColor(0 / 255.0f, 0 / 255.0f, 153 / 255.0f, 1);
+        shapeRenderer.rect(0, 0, 30, gameHeight);
+        shapeRenderer.rect(130, 0, 30, gameHeight);
+        shapeRenderer.rect(30, 0, 100, veticalBar);
+        shapeRenderer.rect(30, gameHeight - veticalBar, 100, veticalBar);
+
         // Draw Background color
         shapeRenderer.setColor(Color.BLACK);
-        shapeRenderer.rect(0, 0, 250, 500);
+        shapeRenderer.rect(30, veticalBar, 100, 200);
+
+        // Draw Hold Square
+        shapeRenderer.rect(5, veticalBar + 12, 20, 20);
+        //Draw Next Squares
+        shapeRenderer.rect(135, veticalBar + 12, 20, 20);
+        shapeRenderer.rect(135, veticalBar + 37, 20, 20);
+        shapeRenderer.rect(135, veticalBar + 62, 20, 20);
+        shapeRenderer.rect(135, veticalBar + 87, 20, 20);
+        shapeRenderer.rect(135, veticalBar + 112, 20, 20);
 
         // End ShapeRenderer
         shapeRenderer.end();
@@ -68,15 +87,21 @@ public class GameRenderer {
         //batcher.draw(AssetLoader.pieceI, 25, 0, 25 / 2, 25 / 2);
 
         for(Square s : squares) {
-            batcher.draw(AssetLoader.colors.get(s.getColor()), s.getX(), s.getY(), 25, 25);
+            batcher.draw(AssetLoader.colors.get(s.getColor()), s.getX() + 30, s.getY() + veticalBar, 10, 10);
         }
 
         for(Square s : tetrominoe) {
-            batcher.draw(AssetLoader.colors.get(s.getColor()), s.getX(), s.getY(), 25, 25);
+            batcher.draw(AssetLoader.colors.get(s.getColor()), s.getX() + 30, s.getY() + veticalBar, 10, 10);
         }
 
-        // The bird needs transparency, so we enable that again.
-        batcher.enableBlending();
+        AssetLoader.font.draw(batcher, "HOLD", 8, 3);
+        AssetLoader.font.draw(batcher, "NEXT", 137, 3);
+        AssetLoader.font.draw(batcher, "LEVEL", 6, 75);
+        AssetLoader.font.draw(batcher, "1", 13, 85);
+        AssetLoader.font.draw(batcher, "GOAL", 7, 100);
+        AssetLoader.font.draw(batcher, "20", 10, 110);
+        AssetLoader.font.draw(batcher, "SCORE", 5, 125);
+        AssetLoader.font.draw(batcher, "100", 9, 135);
 
 
         // End SpriteBatch

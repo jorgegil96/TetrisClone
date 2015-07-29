@@ -16,7 +16,7 @@ public class Square {
     }
 
     public void fall() {
-        position.add(0, 25);
+        position.add(0, 10);
     }
 
     public void move(float x) {

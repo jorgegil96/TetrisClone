@@ -1,5 +1,7 @@
 package com.jorgegil.gameboard;
 
+import com.badlogic.gdx.math.*;
+import com.badlogic.gdx.math.Rectangle;
 import com.jorgegil.boardobjects.Square;
 import com.jorgegil.boardobjects.Tetrominoe;
 import com.jorgegil.tgHelpers.AssetLoader;
@@ -17,7 +19,7 @@ public class GameBoard {
     private boolean[][] board, tetrominoeShape, tetriminoShape2;
     private ArrayList<Square> squares;
     private ArrayList<Square> tetrominoe;
-    private int num;
+    private int num, score = 0, level = 1, goal = 20;
 
     public GameBoard() {
         // Create and fill board with false values
@@ -47,7 +49,7 @@ public class GameBoard {
                 pieceCanFall = false;
         }
 
-         /* If true then increment Y by 25 on all 4 Squares
+         /* If true then increment Y by 10 on all 4 Squares
            If false add squares from falling tetrominoe to non-falling squares ArrayList, update board and spawn new
          */
         if(pieceCanFall) {
@@ -60,8 +62,8 @@ public class GameBoard {
         else {
             for (Square s : tetrominoe) {
                 squares.add(new Square(s.getX(), s.getY(), s.getColor()));
-                int i = (int) s.getY() / 25;
-                int j = (int) s.getX() / 25;
+                int i = (int) s.getY() / 10;
+                int j = (int) s.getX() / 10;
                 board[i][j] = true;
             }
             checkForLine();
@@ -79,8 +81,8 @@ public class GameBoard {
 
     public boolean canSquareFall(float x, float y) {
         //convert x and y to j and i
-        int j = (int) x / 25;
-        int i = (int) y / 25;
+        int j = (int) x / 10;
+        int i = (int) y / 10;
 
         if(i == 19)
             return false;
@@ -116,8 +118,8 @@ public class GameBoard {
                 startJ += j;
                 startI = i;
 
-                int startX = startJ * 25;
-                int startY = startI * 25;
+                int startX = startJ * 10;
+                int startY = startI * 10;
 
                 if(tetrominoeShape[i][j]) {
                     tetrominoe.add(new Square(startX, startY, num));
@@ -139,7 +141,7 @@ public class GameBoard {
 
         if(pieceCanMoveRight) {
             for (Square s : tetrominoe) {
-                s.move(25);
+                s.move(10);
             }
 
         }
@@ -147,8 +149,8 @@ public class GameBoard {
 
     public boolean canSquareMoveRight(float x, float y) {
         // Convert x and y to j and i
-        int j = (int) x / 25;
-        int i = (int) y / 25;
+        int j = (int) x / 10;
+        int i = (int) y / 10;
 
         if(j == 9)
             return false;
@@ -168,15 +170,15 @@ public class GameBoard {
 
         if(pieceCanMoveLeft) {
             for (Square s : tetrominoe) {
-                s.move(-25);
+                s.move(-10);
             }
         }
     }
 
     public boolean canSquareMoveLeft(float x, float y) {
         // Convert x and y to j and i
-        int j = (int) x / 25;
-        int i = (int) y / 25;
+        int j = (int) x / 10;
+        int i = (int) y / 10;
 
         if(j == 0)
             return false;
@@ -242,8 +244,8 @@ public class GameBoard {
                     int newJ = prevJ + difJ;
 
                     // new coordinates of square
-                    int fixedI = (int) (tetrominoe.get(count).getY() / 25) + difI;
-                    int fixedJ = (int) (tetrominoe.get(count).getX() / 25) + difJ;
+                    int fixedI = (int) (tetrominoe.get(count).getY() / 10) + difI;
+                    int fixedJ = (int) (tetrominoe.get(count).getX() / 10) + difJ;
 
                     // check if new coordinates of square are valid, if not set rotate to false
                     if(fixedJ < 0 || fixedJ > 9 || fixedI < 0 || fixedI > 19) { // check for border collision
@@ -256,7 +258,7 @@ public class GameBoard {
                     }
 
                     // Add the difference of square coordinates to arraylist
-                    difCoordinates.add(new Point(difI * 25, difJ * 25));
+                    difCoordinates.add(new Point(difI * 10, difJ * 10));
 
                     count++;
                 }
@@ -349,7 +351,7 @@ public class GameBoard {
          */
         for (Iterator<Square> it = squares.iterator(); it.hasNext(); ) {
             Square s = it.next();
-            int i = (int) s.getY() / 25;
+            int i = (int) s.getY() / 10;
 
             if(i < line) {
                 s.fall();
@@ -370,6 +372,18 @@ public class GameBoard {
                 }
             }
         }
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public int getGoal() {
+        return goal;
     }
 
     public void printBoard() {
