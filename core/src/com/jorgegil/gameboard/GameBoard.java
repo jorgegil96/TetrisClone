@@ -58,6 +58,9 @@ public class GameBoard {
             case PAUSE:
                 updateReady(delta);
                 break;
+            case GAMEOVER:
+                updateReady(delta);
+                break;
             case RUNNING:
             default:
                 updateRunning(delta);
@@ -77,6 +80,10 @@ public class GameBoard {
         return currentState == GameState.RUNNING;
     }
 
+    public boolean isGameOver() {
+        return currentState == GameState.GAMEOVER;
+    }
+
     public void start() {
         currentState = GameState.RUNNING;
         AssetLoader.music.resume();
@@ -87,8 +94,9 @@ public class GameBoard {
         AssetLoader.music.pause();
     }
 
-    public boolean isGameOver() {
-        return currentState == GameState.GAMEOVER;
+    public void endGame() {
+        currentState = GameState.GAMEOVER;
+        AssetLoader.music.pause();
     }
 
     public void updateReady(float delta) {
@@ -176,8 +184,15 @@ public class GameBoard {
                 int startX = startJ * 10;
                 int startY = startI * 10;
 
+
+
                 if(tetrominoeShape[i][j]) {
-                    tetrominoe.add(new Square(startX, startY, num));
+                    if (!board[startI][startJ]) {
+                        tetrominoe.add(new Square(startX, startY, num));
+                    }
+                    else {
+                        endGame();
+                    }
                 }
                 startJ = (10 - maxCol) / 2;
             }

@@ -109,8 +109,11 @@ public class GameRenderer {
         if (myBoard.isReady()) {
             AssetLoader.font.draw(batcher, "READY", 70, (gameHeight / 2) - 10);
         }
-        else if(myBoard.isPaused()) {
+        else if (myBoard.isPaused()) {
             AssetLoader.font.draw(batcher, "PAUSED", 70, (gameHeight / 2) - 10);
+        }
+        else if (myBoard.isGameOver()) {
+            AssetLoader.font.draw(batcher, "GAME OVER", 60, (gameHeight / 2) - 10);
         }
 
 
