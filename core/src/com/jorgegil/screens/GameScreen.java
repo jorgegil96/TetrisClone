@@ -36,42 +36,56 @@ public class GameScreen implements Screen{
         downTime -= delta;
         rotateTime -= delta;
 
-        if (Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT)) {
-            if(!Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT)) {
-                if (moveTime <= 0) {
-                    board.moveLeft();
-                    moveTime = 0.1f;
+        if (board.isRunning()) {
+            if (Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT)) {
+                if (!Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT)) {
+                    if (moveTime <= 0) {
+                        board.moveLeft();
+                        moveTime = 0.1f;
+                    }
                 }
             }
-
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT)) {
-            if(!Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT)) {
-                if (moveTime <= 0) {
-                    board.moveRight();
-                    moveTime = 0.1f;
+            if (Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT)) {
+                if (!Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT)) {
+                    if (moveTime <= 0) {
+                        board.moveRight();
+                        moveTime = 0.1f;
+                    }
                 }
             }
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.DPAD_DOWN)) {
-            if (downTime <= 0) {
-                board.moveDown();
-                downTime = 0.1f;
+            if (Gdx.input.isKeyPressed(Input.Keys.DPAD_DOWN)) {
+                if (downTime <= 0) {
+                    board.moveDown();
+                    downTime = 0.1f;
+                }
             }
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.DPAD_UP)) {
-            if (rotateTime <= 0) {
-                board.rotate(0);
-                rotateTime = 0.1f;
-            }
+            if (Gdx.input.isKeyPressed(Input.Keys.DPAD_UP)) {
+                if (rotateTime <= 0) {
+                    board.rotate(0);
+                    rotateTime = 0.1f;
+                }
 
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.Z)) {
-            if (rotateTime <= 0) {
-                board.rotate(1);
-                rotateTime = 0.1f;
             }
+            if (Gdx.input.isKeyPressed(Input.Keys.Z)) {
+                if (rotateTime <= 0) {
+                    board.rotate(1);
+                    rotateTime = 0.1f;
+                }
 
+            }
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
+            if(board.isPaused()) {
+                board.start();
+            }
+            else {
+                board.stop();
+            }
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+            if(board.isReady()) {
+                board.start();
+            }
         }
 
         if(dropTime <= 0) {

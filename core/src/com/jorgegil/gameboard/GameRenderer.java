@@ -102,6 +102,16 @@ public class GameRenderer {
         AssetLoader.font.draw(batcher, "" + myBoard.getGoal(), 10, 110);
         AssetLoader.font.draw(batcher, "SCORE", 5, 125);
         AssetLoader.font.draw(batcher, "" + myBoard.getScore(), 9, 135);
+        AssetLoader.font.draw(batcher, "HIGH", 7, 165);
+        AssetLoader.font.draw(batcher, "SCORE", 5, 175);
+        AssetLoader.font.draw(batcher, "" + myBoard.getScore(), 9, 185);
+
+        if (myBoard.isReady()) {
+            AssetLoader.font.draw(batcher, "READY", 70, (gameHeight / 2) - 10);
+        }
+        else if(myBoard.isPaused()) {
+            AssetLoader.font.draw(batcher, "PAUSED", 70, (gameHeight / 2) - 10);
+        }
 
 
         // End SpriteBatch

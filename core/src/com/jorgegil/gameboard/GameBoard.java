@@ -16,10 +16,17 @@ import java.util.Random;
  */
 public class GameBoard {
 
+    public enum GameState {
+        READY, RUNNING, PAUSE, GAMEOVER
+    }
+
     private boolean[][] board, tetrominoeShape, tetriminoShape2;
     private ArrayList<Square> squares;
     private ArrayList<Square> tetrominoe;
     private int num, score = 0, level = 1, goal = 20;
+    public GameState currentState;
+
+
 
     public GameBoard() {
         // Create and fill board with false values
@@ -38,9 +45,57 @@ public class GameBoard {
         spawnTetrominoe();
 
         AssetLoader.music.loop();
+        AssetLoader.music.pause();
+
+        currentState = GameState.READY;
     }
 
     public void update(float delta) {
+        switch (currentState) {
+            case READY:
+                updateReady(delta);
+                break;
+            case PAUSE:
+                updateReady(delta);
+                break;
+            case RUNNING:
+            default:
+                updateRunning(delta);
+                break;
+        }
+    }
+
+    public boolean isReady() {
+        return currentState == GameState.READY;
+    }
+
+    public boolean isPaused() {
+        return currentState == GameState.PAUSE;
+    }
+
+    public boolean isRunning() {
+        return currentState == GameState.RUNNING;
+    }
+
+    public void start() {
+        currentState = GameState.RUNNING;
+        AssetLoader.music.resume();
+    }
+
+    public void stop() {
+        currentState = GameState.PAUSE;
+        AssetLoader.music.pause();
+    }
+
+    public boolean isGameOver() {
+        return currentState == GameState.GAMEOVER;
+    }
+
+    public void updateReady(float delta) {
+
+    }
+
+    public void updateRunning(float delta) {
         boolean pieceCanFall = true;
 
         // Checks if whole tetrominoe can fall
