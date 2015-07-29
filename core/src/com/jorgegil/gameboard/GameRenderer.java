@@ -97,11 +97,11 @@ public class GameRenderer {
         AssetLoader.font.draw(batcher, "HOLD", 8, 3);
         AssetLoader.font.draw(batcher, "NEXT", 137, 3);
         AssetLoader.font.draw(batcher, "LEVEL", 6, 75);
-        AssetLoader.font.draw(batcher, "1", 13, 85);
+        AssetLoader.font.draw(batcher, "" + myBoard.getLevel(), 13, 85);
         AssetLoader.font.draw(batcher, "GOAL", 7, 100);
-        AssetLoader.font.draw(batcher, "20", 10, 110);
+        AssetLoader.font.draw(batcher, "" + myBoard.getGoal(), 10, 110);
         AssetLoader.font.draw(batcher, "SCORE", 5, 125);
-        AssetLoader.font.draw(batcher, "100", 9, 135);
+        AssetLoader.font.draw(batcher, "" + myBoard.getScore(), 9, 135);
 
 
         // End SpriteBatch

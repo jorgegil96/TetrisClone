@@ -329,6 +329,7 @@ public class GameBoard {
     }
 
     public void checkForLine () {
+        int numLines = 0;
         for(int i = 0; i < board.length; i++) {
 
             boolean lineCompleted = true;
@@ -339,8 +340,33 @@ public class GameBoard {
                 }
             }
 
-            if(lineCompleted)
+            if(lineCompleted) {
                 moveAllDown(i);
+                numLines++;
+            }
+        }
+
+        if(numLines > 0) {
+            switch (numLines) {
+                case 1:
+                    addScore(100 * (getLevel()));
+                    break;
+                case 2:
+                    addScore(300 * (getLevel()));
+                    break;
+                case 3:
+                    addScore(500 * (getLevel()));
+                    break;
+                case 4:
+                    addScore(800 * (getLevel()));
+                    break;
+            }
+            if (getGoal() - numLines <= 0) {
+                setGoal(20);
+                addLevel();
+            } else {
+                setGoal(getGoal() - numLines);
+            }
         }
     }
 
@@ -378,12 +404,24 @@ public class GameBoard {
         return score;
     }
 
+    public void addScore(int increment) {
+        score += increment;
+    }
+
     public int getLevel() {
         return level;
     }
 
+    public void addLevel() {
+        level++;
+    }
+
     public int getGoal() {
         return goal;
+    }
+
+    public void setGoal(int goal) {
+        this.goal = goal;
     }
 
     public void printBoard() {
