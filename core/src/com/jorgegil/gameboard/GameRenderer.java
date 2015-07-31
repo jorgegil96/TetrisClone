@@ -91,12 +91,12 @@ public class GameRenderer {
             batcher.draw(AssetLoader.colors.get(s.getColor()), s.getX() + 30, s.getY() + veticalBar, 10, 10);
         }
 
-        for(Square s : tetrominoe) {
-            batcher.draw(AssetLoader.colors.get(s.getColor()), s.getX() + 30, s.getY() + veticalBar, 10, 10);
-        }
-
         for (Square s : ghost) {
             batcher.draw(AssetLoader.colors.get(7), s.getX() + 30, s.getY() + veticalBar, 10, 10);
+        }
+
+        for(Square s : tetrominoe) {
+            batcher.draw(AssetLoader.colors.get(s.getColor()), s.getX() + 30, s.getY() + veticalBar, 10, 10);
         }
 
         AssetLoader.font.draw(batcher, "HOLD", 8, 3);

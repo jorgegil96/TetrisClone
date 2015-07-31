@@ -12,6 +12,7 @@ import java.util.Random;
 /**
  * Created by jorgegil on 7/27/15.
  */
+
 public class GameBoard {
 
     public enum GameState {
@@ -19,12 +20,9 @@ public class GameBoard {
     }
 
     private boolean[][] board, tetrominoeShape, tetriminoShape2;
-    private ArrayList<Square> squares;
-    private ArrayList<Square> tetrominoe, ghost;
+    private ArrayList<Square> squares, tetrominoe, ghost;
     private int num, score = 0, level = 1, goal = 20;
     public GameState currentState;
-
-
 
     public GameBoard() {
         // Create and fill board with false values
@@ -142,17 +140,6 @@ public class GameBoard {
         return tetrominoe;
     }
 
-    public boolean canSquareFall(float x, float y) {
-        //convert x and y to j and i
-        int j = (int) x / 10;
-        int i = (int) y / 10;
-
-        if(i == 19)
-            return false;
-
-        return !board[i + 1][j];
-    }
-
     public ArrayList<Square> getGhost() {
         ghost.clear();
         boolean pieceCanMoveDown = true;
@@ -179,24 +166,6 @@ public class GameBoard {
         }
 
         return ghost;
-    }
-
-    public void hardDrop() {
-        boolean pieceCanMoveDown = true;
-
-        while (pieceCanMoveDown) {
-            for (Square s : tetrominoe) {
-                if (!canSquareFall(s.getX(), s.getY())) {
-                    pieceCanMoveDown = false;
-                }
-            }
-            if(pieceCanMoveDown) {
-                for (Square s : tetrominoe) {
-                    s.fall();
-                }
-            }
-        }
-
     }
 
     public void spawnTetrominoe() {
@@ -319,7 +288,33 @@ public class GameBoard {
         }
     }
 
+    public boolean canSquareFall(float x, float y) {
+        //convert x and y to j and i
+        int j = (int) x / 10;
+        int i = (int) y / 10;
 
+        if(i == 19)
+            return false;
+
+        return !board[i + 1][j];
+    }
+
+    public void hardDrop() {
+        boolean pieceCanMoveDown = true;
+
+        while (pieceCanMoveDown) {
+            for (Square s : tetrominoe) {
+                if (!canSquareFall(s.getX(), s.getY())) {
+                    pieceCanMoveDown = false;
+                }
+            }
+            if(pieceCanMoveDown) {
+                for (Square s : tetrominoe) {
+                    s.fall();
+                }
+            }
+        }
+    }
 
     public void rotate(int w) { // 0 -> CW, 1 -> CCW
         boolean pieceCanRotate = true;
