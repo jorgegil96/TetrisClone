@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.jorgegil.gameboard.GameBoard;
 import com.jorgegil.gameboard.GameRenderer;
+import com.jorgegil.tgHelpers.InputHandler;
 
 /**
  * Created by jorgegil on 7/27/15.
@@ -13,7 +14,9 @@ public class GameScreen implements Screen{
 
     private GameBoard board;
     private GameRenderer renderer;
-    private float runTime = 0, dropTime = 1, moveTime = 0.1f, downTime = 0.1f, rotateTime = 0.1f;
+    InputHandler handler;
+    private float runTime = 0, dropTime = 1, moveTime = 0.1f, downTime = 0.1f, rotateTime = 0.1f,
+            hardDropTime = 0.1f, pauseTime = 0.5f;
 
     public GameScreen() {
 
@@ -26,6 +29,8 @@ public class GameScreen implements Screen{
         board = new GameBoard();
         renderer = new GameRenderer(board, (int) gameHeight);
 
+        handler = new InputHandler(board);
+        Gdx.input.setInputProcessor(handler);
     }
 
     @Override
@@ -35,58 +40,65 @@ public class GameScreen implements Screen{
         moveTime -= delta;
         downTime -= delta;
         rotateTime -= delta;
+        hardDropTime -= delta;
+        pauseTime -= delta;
 
         if (board.isRunning()) {
-            if (Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT)) {
-                if (!Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT)) {
+            if (handler.leftPressed) {
+                if (!handler.rightPressed) {
                     if (moveTime <= 0) {
                         board.moveLeft();
                         moveTime = 0.1f;
                     }
                 }
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT)) {
-                if (!Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT)) {
+            if (handler.rightPressed) {
+                if (!handler.leftPressed) {
                     if (moveTime <= 0) {
                         board.moveRight();
                         moveTime = 0.1f;
                     }
                 }
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.DPAD_DOWN)) {
+            if (handler.downPressed) {
                 if (downTime <= 0) {
                     board.moveDown();
                     downTime = 0.1f;
                 }
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.DPAD_UP)) {
+            if (handler.upPressed) {
                 if (rotateTime <= 0) {
                     board.rotate(0);
                     rotateTime = 0.1f;
                 }
 
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.Z)) {
+            if (handler.zPressed) {
                 if (rotateTime <= 0) {
                     board.rotate(1);
                     rotateTime = 0.1f;
                 }
 
             }
-            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-                board.hardDrop();
-                dropTime = 0;
+            if (handler.spacePressed) {
+                if(hardDropTime <= 0) {
+                    board.hardDrop();
+                    dropTime = 0;
+                    hardDropTime = 0.1f;
+                }
             }
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
-            if(board.isPaused()) {
-                board.start();
-            }
-            else {
-                board.stop();
+        if (handler.pPressed) {
+            if(pauseTime <= 0) {
+                if (board.isPaused()) {
+                    board.start();
+                } else {
+                    board.stop();
+                }
+                pauseTime = 0.5f;
             }
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+        if (handler.enterPressed) {
             if(board.isReady()) {
                 board.start();
             }
