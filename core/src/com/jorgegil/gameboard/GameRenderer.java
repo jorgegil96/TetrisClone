@@ -47,6 +47,7 @@ public class GameRenderer {
 
         ArrayList<Square> squares = myBoard.getSquares();
         ArrayList<Square> tetrominoe = myBoard.getTetrominoe();
+        ArrayList<Square> ghost = myBoard.getGhost();
 
         // Fill the entire screen with black, to prevent potential flickering.
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -92,6 +93,10 @@ public class GameRenderer {
 
         for(Square s : tetrominoe) {
             batcher.draw(AssetLoader.colors.get(s.getColor()), s.getX() + 30, s.getY() + veticalBar, 10, 10);
+        }
+
+        for (Square s : ghost) {
+            batcher.draw(AssetLoader.colors.get(7), s.getX() + 30, s.getY() + veticalBar, 10, 10);
         }
 
         AssetLoader.font.draw(batcher, "HOLD", 8, 3);

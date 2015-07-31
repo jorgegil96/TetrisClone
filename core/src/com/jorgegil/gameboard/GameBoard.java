@@ -1,7 +1,5 @@
 package com.jorgegil.gameboard;
 
-import com.badlogic.gdx.math.*;
-import com.badlogic.gdx.math.Rectangle;
 import com.jorgegil.boardobjects.Square;
 import com.jorgegil.boardobjects.Tetrominoe;
 import com.jorgegil.tgHelpers.AssetLoader;
@@ -22,7 +20,7 @@ public class GameBoard {
 
     private boolean[][] board, tetrominoeShape, tetriminoShape2;
     private ArrayList<Square> squares;
-    private ArrayList<Square> tetrominoe;
+    private ArrayList<Square> tetrominoe, ghost;
     private int num, score = 0, level = 1, goal = 20;
     public GameState currentState;
 
@@ -41,6 +39,8 @@ public class GameBoard {
         squares = new ArrayList<Square>();
         // tetrominoe contains current falling squares
         tetrominoe = new ArrayList<Square>();
+        // Ghost contains ghost squares
+        ghost = new ArrayList<Square>();
 
         spawnTetrominoe();
 
@@ -151,6 +151,52 @@ public class GameBoard {
             return false;
 
         return !board[i + 1][j];
+    }
+
+    public ArrayList<Square> getGhost() {
+        ghost.clear();
+        boolean pieceCanMoveDown = true;
+
+        for (Square s : tetrominoe) {
+            int x = (int) s.getX();
+            int y = (int) s.getY();
+            int num = s.getColor();
+            ghost.add(new Square(x, y, num));
+        }
+
+        while (pieceCanMoveDown) {
+            for (Square s : ghost) {
+                if (!canSquareFall(s.getX(), s.getY())) {
+                    pieceCanMoveDown = false;
+                }
+            }
+
+            if(pieceCanMoveDown) {
+                for (Square s : ghost) {
+                    s.fall();
+                }
+            }
+        }
+
+        return ghost;
+    }
+
+    public void hardDrop() {
+        boolean pieceCanMoveDown = true;
+
+        while (pieceCanMoveDown) {
+            for (Square s : tetrominoe) {
+                if (!canSquareFall(s.getX(), s.getY())) {
+                    pieceCanMoveDown = false;
+                }
+            }
+            if(pieceCanMoveDown) {
+                for (Square s : tetrominoe) {
+                    s.fall();
+                }
+            }
+        }
+
     }
 
     public void spawnTetrominoe() {
@@ -273,23 +319,7 @@ public class GameBoard {
         }
     }
 
-    public void hardDrop() {
-        boolean pieceCanMoveDown = true;
 
-        while (pieceCanMoveDown) {
-            for (Square s : tetrominoe) {
-                if (!canSquareFall(s.getX(), s.getY())) {
-                    pieceCanMoveDown = false;
-                }
-            }
-            if(pieceCanMoveDown) {
-                for (Square s : tetrominoe) {
-                    s.fall();
-                }
-            }
-        }
-
-    }
 
     public void rotate(int w) { // 0 -> CW, 1 -> CCW
         boolean pieceCanRotate = true;

@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class AssetLoader {
 
     public static Texture texture;
-    public static TextureRegion pieceI, pieceO, pieceT, pieceJ, pieceL, pieceS, pieceZ;
+    public static TextureRegion pieceI, pieceO, pieceT, pieceJ, pieceL, pieceS, pieceZ, pieceG;
     public static ArrayList<TextureRegion> colors;
     public static Sound music;
     public static BitmapFont font;
@@ -30,6 +30,7 @@ public class AssetLoader {
         pieceL = new TextureRegion(texture, 125, 0, 25, 25);
         pieceS = new TextureRegion(texture, 75, 0, 25, 25);
         pieceZ = new TextureRegion(texture, 25, 0, 25, 25);
+        pieceG = new TextureRegion(texture, 175, 0, 25, 25); //ghost
 
         colors = new ArrayList<TextureRegion>();
         colors.add(pieceI);
@@ -39,6 +40,7 @@ public class AssetLoader {
         colors.add(pieceL);
         colors.add(pieceS);
         colors.add(pieceZ);
+        colors.add(pieceG);
 
         music = Gdx.audio.newSound(Gdx.files.internal("data/music.mp3"));
 
