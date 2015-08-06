@@ -48,6 +48,7 @@ public class GameRenderer {
         ArrayList<Square> squares = myBoard.getSquares();
         ArrayList<Square> tetrominoe = myBoard.getTetrominoe();
         ArrayList<Square> ghost = myBoard.getGhost();
+        ArrayList<Integer> nextShape = myBoard.getNextShape();
 
         // Fill the entire screen with black, to prevent potential flickering.
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -86,6 +87,10 @@ public class GameRenderer {
         // transparency.
         batcher.disableBlending();
         //batcher.draw(AssetLoader.pieceI, 25, 0, 25 / 2, 25 / 2);
+
+        for (int i = 0; i < 5; i++) {
+            batcher.draw(AssetLoader.tetriminoImage.get(nextShape.get(i)), 135, veticalBar + 12 + (25 * i), 20, 20);
+        }
 
         for(Square s : squares) {
             batcher.draw(AssetLoader.colors.get(s.getColor()), s.getX() + 30, s.getY() + veticalBar, 10, 10);

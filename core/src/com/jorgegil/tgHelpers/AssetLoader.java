@@ -13,9 +13,10 @@ import java.util.ArrayList;
  */
 public class AssetLoader {
 
-    public static Texture texture;
+    public static Texture texture, tetriminoI, tetriminoO, tetriminoT, tetriminoJ, tetriminoL, tetriminoS, tetriminoZ;
     public static TextureRegion pieceI, pieceO, pieceT, pieceJ, pieceL, pieceS, pieceZ, pieceG;
     public static ArrayList<TextureRegion> colors;
+    public static ArrayList<Texture> tetriminoImage;
     public static Sound music;
     public static BitmapFont font;
 
@@ -41,6 +42,25 @@ public class AssetLoader {
         colors.add(pieceS);
         colors.add(pieceZ);
         colors.add(pieceG);
+
+        tetriminoI = new Texture(Gdx.files.internal("data/i.png"));
+        tetriminoO = new Texture(Gdx.files.internal("data/o.png"));
+        tetriminoT = new Texture(Gdx.files.internal("data/t.png"));
+        tetriminoJ = new Texture(Gdx.files.internal("data/j.png"));
+        tetriminoL = new Texture(Gdx.files.internal("data/l.png"));
+        tetriminoS = new Texture(Gdx.files.internal("data/s.png"));
+        tetriminoZ = new Texture(Gdx.files.internal("data/z.png"));
+
+        tetriminoImage = new ArrayList<Texture>();
+        tetriminoImage.add(tetriminoI);
+        tetriminoImage.add(tetriminoO);
+        tetriminoImage.add(tetriminoT);
+        tetriminoImage.add(tetriminoJ);
+        tetriminoImage.add(tetriminoL);
+        tetriminoImage.add(tetriminoS);
+        tetriminoImage.add(tetriminoZ);
+
+
 
         music = Gdx.audio.newSound(Gdx.files.internal("data/music.mp3"));
 

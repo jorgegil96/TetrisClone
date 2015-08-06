@@ -15,8 +15,8 @@ public class GameScreen implements Screen{
     private GameBoard board;
     private GameRenderer renderer;
     InputHandler handler;
-    private float runTime = 0, dropTime = 1, moveTime = 0.1f, downTime = 0.1f, rotateTime = 0.1f,
-            hardDropTime = 0.1f, pauseTime = 0.5f;
+    private float runTime = 0, dropTime = 1, moveTime = 0.15f, downTime = 0.15f, rotateTime = 0.1f,
+            hardDropTime = 0.3f, pauseTime = 0.5f;
 
     public GameScreen() {
 
@@ -48,7 +48,7 @@ public class GameScreen implements Screen{
                 if (!handler.rightPressed) {
                     if (moveTime <= 0) {
                         board.moveLeft();
-                        moveTime = 0.1f;
+                        moveTime = 0.15f;
                     }
                 }
             }
@@ -56,14 +56,14 @@ public class GameScreen implements Screen{
                 if (!handler.leftPressed) {
                     if (moveTime <= 0) {
                         board.moveRight();
-                        moveTime = 0.1f;
+                        moveTime = 0.15f;
                     }
                 }
             }
             if (handler.downPressed) {
                 if (downTime <= 0) {
                     board.moveDown();
-                    downTime = 0.1f;
+                    downTime = 0.15f;
                 }
             }
             if (handler.upPressed) {
@@ -84,7 +84,7 @@ public class GameScreen implements Screen{
                 if(hardDropTime <= 0) {
                     board.hardDrop();
                     dropTime = 0;
-                    hardDropTime = 0.1f;
+                    hardDropTime = 0.3f;
                 }
             }
         }

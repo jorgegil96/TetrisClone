@@ -22,6 +22,8 @@ public class GameBoard {
     private boolean[][] board, tetrominoeShape, tetriminoShape2;
     private ArrayList<Square> squares, tetrominoe, ghost;
     private int num, score = 0, level = 1, goal = 20;
+    private int next1 = 0, next2 = 0, next3 = 0, next4 = 0, next5 = 0, next6 = 0;
+    private ArrayList<Integer> nextShape;
     public GameState currentState;
 
     public GameBoard() {
@@ -40,6 +42,10 @@ public class GameBoard {
         // Ghost contains ghost squares
         ghost = new ArrayList<Square>();
 
+        nextShape = new ArrayList<Integer>();
+        for(int i = 0; i < 6; i++) {
+            getNextTetrimino();
+        }
         spawnTetrominoe();
 
         AssetLoader.music.loop();
@@ -168,15 +174,47 @@ public class GameBoard {
         return ghost;
     }
 
+    public void getNextTetrimino() {
+        nextShape.clear();
+        Random rd = new Random();
+        num = rd.nextInt(7);
+
+        next1 = next2;
+        next2 = next3;
+        next3 = next4;
+        next4 = next5;
+        next5 = next6;
+        next6 = num;
+
+        nextShape.add(next2);
+        nextShape.add(next3);
+        nextShape.add(next4);
+        nextShape.add(next5);
+        nextShape.add(next6);
+
+
+        //System.out.println(next1);
+        System.out.println(next2);
+        System.out.println(next3);
+        System.out.println(next4);
+        System.out.println(next5);
+        System.out.println(next6);
+
+        System.out.println("------------");
+
+    }
+
     public void spawnTetrominoe() {
         tetrominoe.clear();
 
         // Random num (0 - 6) to choose Shape and Color of new tetrominoe
-        Random rd = new Random();
-        num = rd.nextInt(7);
+        //Random rd = new Random();
+        //num = rd.nextInt(7);
+
+        getNextTetrimino();
 
         // Gets new tetrominoe shape
-        tetrominoeShape = Tetrominoe.getShape(num);
+        tetrominoeShape = Tetrominoe.getShape(next1);
         tetriminoShape2 = new boolean[tetrominoeShape.length][tetrominoeShape.length];
         copyArray();
 
@@ -203,7 +241,7 @@ public class GameBoard {
 
                 if(tetrominoeShape[i][j]) {
                     if (!board[startI][startJ]) {
-                        tetrominoe.add(new Square(startX, startY, num));
+                        tetrominoe.add(new Square(startX, startY, next1));
                     }
                     else {
                         endGame();
@@ -535,6 +573,10 @@ public class GameBoard {
 
     public void setGoal(int goal) {
         this.goal = goal;
+    }
+
+    public ArrayList<Integer> getNextShape() {
+        return nextShape;
     }
 
     public void printBoard() {
