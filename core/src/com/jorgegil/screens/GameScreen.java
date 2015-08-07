@@ -3,7 +3,11 @@ package com.jorgegil.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.FPSLogger;
+import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.jorgegil.gameboard.GameBoard;
 import com.jorgegil.gameboard.GameRenderer;
 import com.jorgegil.tgHelpers.InputHandler;
@@ -12,6 +16,12 @@ import com.jorgegil.tgHelpers.InputHandler;
  * Created by jorgegil on 7/27/15.
  */
 public class GameScreen implements Screen{
+
+    private static final float MIN_SCENE_WIDTH = 160.0f;
+    private static final float MIN_SCENE_HEIGHT = 200.0f;
+
+    private Viewport viewport;
+    private Camera camera;
 
     private GameBoard board;
     private GameRenderer renderer;
@@ -23,14 +33,14 @@ public class GameScreen implements Screen{
 
     public GameScreen() {
 
-        float screenWidth = Gdx.graphics.getWidth();
-        float screenHeight = Gdx.graphics.getHeight();
-        float gameWidth = 160;
-        float gameHeight = screenHeight / (screenWidth / gameWidth);
+        camera = new PerspectiveCamera();
+        viewport = new FitViewport(MIN_SCENE_WIDTH, MIN_SCENE_HEIGHT, camera);
+
+        float gameHeight = 200;
 
 
         board = new GameBoard();
-        renderer = new GameRenderer(board, (int) gameHeight);
+        renderer = new GameRenderer(board);
 
         handler = new InputHandler(board);
         Gdx.input.setInputProcessor(handler);
@@ -160,7 +170,7 @@ public class GameScreen implements Screen{
 
     @Override
     public void resize(int width, int height) {
-
+        viewport.update(width, height);
     }
 
     @Override

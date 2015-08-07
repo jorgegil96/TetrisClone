@@ -22,25 +22,20 @@ public class GameRenderer {
     private OrthographicCamera cam;
     private ShapeRenderer shapeRenderer;
 
-    private SpriteBatch batcher;
+    private SpriteBatch batch;
 
     GlyphLayout layout;
 
-    private int gameHeight, veticalBar;
-
     private final float HOLD_W, NEXT_W, LEVEL_W, SCORE_W, HIGH_W, GOAL_W, HIGH_SCORE_W;
 
-    public GameRenderer(GameBoard board, int gameHeight) {
+    public GameRenderer(GameBoard board) {
         myBoard = board;
 
-        this.gameHeight = gameHeight;
-        veticalBar = (gameHeight - 200) / 2;
-
         cam = new OrthographicCamera();
-        cam.setToOrtho(true, 160, gameHeight);
+        cam.setToOrtho(true, 160, 200);
 
-        batcher = new SpriteBatch();
-        batcher.setProjectionMatrix(cam.combined);
+        batch = new SpriteBatch();
+        batch.setProjectionMatrix(cam.combined);
 
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(cam.combined);
@@ -79,90 +74,87 @@ public class GameRenderer {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
         // Draw Border Colors
-        shapeRenderer.setColor(0 / 255.0f, 0 / 255.0f, 153 / 255.0f, 1);
-        shapeRenderer.rect(0, 0, 30, gameHeight);
-        shapeRenderer.rect(130, 0, 30, gameHeight);
-        shapeRenderer.rect(30, 0, 100, veticalBar);
-        shapeRenderer.rect(30, gameHeight - veticalBar, 100, veticalBar);
+        shapeRenderer.setColor(0 / 255.0f, 0 / 255.0f, 153 / 255.0f, 1); //BLUE
+        shapeRenderer.rect(0, 0, 30, 200);
+        shapeRenderer.rect(130, 0, 30, 200);
 
-        // Draw Background color
+        // Draw Board Background color
         shapeRenderer.setColor(Color.BLACK);
-        shapeRenderer.rect(30, veticalBar, 100, 200);
+        shapeRenderer.rect(30, 0, 100, 200);
 
         // Draw Hold Square
-        shapeRenderer.rect(5, veticalBar + 12, 20, 20);
+        shapeRenderer.rect(5, 12, 20, 20);
         //Draw Next Squares
-        shapeRenderer.rect(135, veticalBar + 12, 20, 20);
-        shapeRenderer.rect(135, veticalBar + 37, 20, 20);
-        shapeRenderer.rect(135, veticalBar + 62, 20, 20);
-        shapeRenderer.rect(135, veticalBar + 87, 20, 20);
-        shapeRenderer.rect(135, veticalBar + 112, 20, 20);
+        shapeRenderer.rect(135, 12, 20, 20);
+        shapeRenderer.rect(135, 37, 20, 20);
+        shapeRenderer.rect(135, 62, 20, 20);
+        shapeRenderer.rect(135, 87, 20, 20);
+        shapeRenderer.rect(135, 112, 20, 20);
 
         // End ShapeRenderer
         shapeRenderer.end();
 
         // Begin SpriteBatch
-        batcher.begin();
+        batch.begin();
         // Disable transparency
         // This is good for performance when drawing images that do not require
         // transparency.
-        batcher.disableBlending();
-        //batcher.draw(AssetLoader.pieceI, 25, 0, 25 / 2, 25 / 2);
+        batch.disableBlending();
 
         for (int i = 0; i < 5; i++) {
-            batcher.draw(AssetLoader.tetriminoImage.get(nextShape.get(i)), 135, veticalBar + 12 + (25 * i), 20, 20);
+            batch.draw(AssetLoader.tetriminoImage.get(nextShape.get(i)), 135, 12 + (25 * i), 20, 20);
         }
 
         if (myBoard.getHold() >= 0) {
-            batcher.draw(AssetLoader.tetriminoImage.get(myBoard.getHold()), 5, veticalBar + 12, 20, 20);
+            batch.draw(AssetLoader.tetriminoImage.get(myBoard.getHold()), 5, 12, 20, 20);
         }
 
         for(Square s : squares) {
-            batcher.draw(AssetLoader.colors.get(s.getColor()), s.getX() + 30, s.getY() + veticalBar, 10, 10);
+            batch.draw(AssetLoader.colors.get(s.getColor()), s.getX() + 30, s.getY(), 10, 10);
         }
 
         for (Square s : ghost) {
-            batcher.draw(AssetLoader.colors.get(7), s.getX() + 30, s.getY() + veticalBar, 10, 10);
+            batch.draw(AssetLoader.colors.get(7), s.getX() + 30, s.getY(), 10, 10);
         }
 
         for(Square s : tetrominoe) {
-            batcher.draw(AssetLoader.colors.get(s.getColor()), s.getX() + 30, s.getY() + veticalBar, 10, 10);
+            batch.draw(AssetLoader.colors.get(s.getColor()), s.getX() + 30, s.getY(), 10, 10);
         }
 
         // DRAW STATIC TEXT
-        AssetLoader.font.draw(batcher, "HOLD", (30 - HOLD_W) / 2, 3);
-        AssetLoader.font.draw(batcher, "LEVEL", (30 - LEVEL_W) / 2, 75);
-        AssetLoader.font.draw(batcher, "GOAL", (30 - GOAL_W) / 2, 100);
-        AssetLoader.font.draw(batcher, "SCORE", (30 - SCORE_W) / 2, 125);
-        AssetLoader.font.draw(batcher, "HIGH", (30 - HIGH_W) / 2, 165);
-        AssetLoader.font.draw(batcher, "SCORE", (30 - SCORE_W) / 2, 175);
-        AssetLoader.font.draw(batcher, "NEXT", 130 + (30 - NEXT_W) / 2, 3);
-        AssetLoader.font.draw(batcher, String.valueOf(myBoard.getHighScore()), (30 - HIGH_SCORE_W) / 2, 185);
+        AssetLoader.font.draw(batch, "HOLD", (30 - HOLD_W) / 2, 3);
+        AssetLoader.font.draw(batch, "LEVEL", (30 - LEVEL_W) / 2, 75);
+        AssetLoader.font.draw(batch, "GOAL", (30 - GOAL_W) / 2, 100);
+        AssetLoader.font.draw(batch, "SCORE", (30 - SCORE_W) / 2, 125);
+        AssetLoader.font.draw(batch, "HIGH", (30 - HIGH_W) / 2, 165);
+        AssetLoader.font.draw(batch, "SCORE", (30 - SCORE_W) / 2, 175);
+        AssetLoader.font.draw(batch, "NEXT", 130 + (30 - NEXT_W) / 2, 3);
+        AssetLoader.font.draw(batch, String.valueOf(myBoard.getHighScore()), (30 - HIGH_SCORE_W) / 2, 185);
 
 
         // DRAW LEVEL, GOAL, SCORE AND HIGHSCORE
         layout.setText(AssetLoader.font, String.valueOf(myBoard.getLevel()));
-        AssetLoader.font.draw(batcher, String.valueOf(myBoard.getLevel()), (30 - layout.width) / 2, 85);
+        AssetLoader.font.draw(batch, String.valueOf(myBoard.getLevel()), (30 - layout.width) / 2, 85);
 
         layout.setText(AssetLoader.font, String.valueOf(myBoard.getGoal()));
-        AssetLoader.font.draw(batcher, String.valueOf(myBoard.getGoal()), (30 - layout.width) / 2, 110);
+        AssetLoader.font.draw(batch, String.valueOf(myBoard.getGoal()), (30 - layout.width) / 2, 110);
 
         layout.setText(AssetLoader.font, String.valueOf(myBoard.getScore()));
-        AssetLoader.font.draw(batcher, String.valueOf(myBoard.getScore()), (30 - layout.width) / 2, 135);
+        AssetLoader.font.draw(batch, String.valueOf(myBoard.getScore()), (30 - layout.width) / 2, 135);
 
         // DRAW GAME STATES WHEN TRIGGERED
         if (myBoard.isReady()) {
-            AssetLoader.font.draw(batcher, "READY", 70, (gameHeight / 2) - 10);
+            AssetLoader.font.draw(batch, "READY", 70, 90);
         }
         else if (myBoard.isPaused()) {
-            AssetLoader.font.draw(batcher, "PAUSED", 70, (gameHeight / 2) - 10);
+            AssetLoader.font.draw(batch, "PAUSED", 70, 90);
         }
         else if (myBoard.isGameOver()) {
-            AssetLoader.font.draw(batcher, "GAME OVER", 60, (gameHeight / 2) - 10);
+            AssetLoader.font.draw(batch, "GAME OVER", 60, 90);
         }
 
         // End SpriteBatch
-        batcher.end();
+        batch.end();
 
     }
 }
