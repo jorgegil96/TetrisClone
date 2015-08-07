@@ -130,7 +130,7 @@ public class GameScreen implements Screen{
         level = board.getLevel();
 
         if (level <= 8) {
-            dropTime = (48.0f - (5.0f * level)) / 60.0f;
+            dropTime = (48.0f - (5.0f * (level - 1))) / 60.0f;
         }
         else if (level == 9) {
             dropTime = 6.0f / 48.0f;

@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.jorgegil.boardobjects.Square;
@@ -23,7 +24,11 @@ public class GameRenderer {
 
     private SpriteBatch batcher;
 
+    GlyphLayout layout;
+
     private int gameHeight, veticalBar;
+
+    private final float HOLD_W, NEXT_W, LEVEL_W, SCORE_W, HIGH_W, GOAL_W, HIGH_SCORE_W;
 
     public GameRenderer(GameBoard board, int gameHeight) {
         myBoard = board;
@@ -40,6 +45,22 @@ public class GameRenderer {
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(cam.combined);
 
+        layout = new GlyphLayout();
+
+        layout.setText(AssetLoader.font, "HOLD");
+        HOLD_W = layout.width;
+        layout.setText(AssetLoader.font, "NEXT");
+        NEXT_W = layout.width;
+        layout.setText(AssetLoader.font, "LEVEL");
+        LEVEL_W = layout.width;
+        layout.setText(AssetLoader.font, "SCORE");
+        SCORE_W = layout.width;
+        layout.setText(AssetLoader.font, "HIGH");
+        HIGH_W = layout.width;
+        layout.setText(AssetLoader.font, "GOAL");
+        GOAL_W = layout.width;
+        layout.setText(AssetLoader.font, String.valueOf(myBoard.getHighScore()));
+        HIGH_SCORE_W = layout.width;
 
     }
 
@@ -108,18 +129,28 @@ public class GameRenderer {
             batcher.draw(AssetLoader.colors.get(s.getColor()), s.getX() + 30, s.getY() + veticalBar, 10, 10);
         }
 
-        AssetLoader.font.draw(batcher, "HOLD", 8, 3);
-        AssetLoader.font.draw(batcher, "NEXT", 137, 3);
-        AssetLoader.font.draw(batcher, "LEVEL", 6, 75);
-        AssetLoader.font.draw(batcher, "" + myBoard.getLevel(), 13, 85);
-        AssetLoader.font.draw(batcher, "GOAL", 7, 100);
-        AssetLoader.font.draw(batcher, "" + myBoard.getGoal(), 10, 110);
-        AssetLoader.font.draw(batcher, "SCORE", 5, 125);
-        AssetLoader.font.draw(batcher, "" + myBoard.getScore(), 9, 135);
-        AssetLoader.font.draw(batcher, "HIGH", 7, 165);
-        AssetLoader.font.draw(batcher, "SCORE", 5, 175);
-        AssetLoader.font.draw(batcher, "" + myBoard.getScore(), 9, 185);
+        // DRAW STATIC TEXT
+        AssetLoader.font.draw(batcher, "HOLD", (30 - HOLD_W) / 2, 3);
+        AssetLoader.font.draw(batcher, "LEVEL", (30 - LEVEL_W) / 2, 75);
+        AssetLoader.font.draw(batcher, "GOAL", (30 - GOAL_W) / 2, 100);
+        AssetLoader.font.draw(batcher, "SCORE", (30 - SCORE_W) / 2, 125);
+        AssetLoader.font.draw(batcher, "HIGH", (30 - HIGH_W) / 2, 165);
+        AssetLoader.font.draw(batcher, "SCORE", (30 - SCORE_W) / 2, 175);
+        AssetLoader.font.draw(batcher, "NEXT", 130 + (30 - NEXT_W) / 2, 3);
+        AssetLoader.font.draw(batcher, String.valueOf(myBoard.getHighScore()), (30 - HIGH_SCORE_W) / 2, 185);
 
+
+        // DRAW LEVEL, GOAL, SCORE AND HIGHSCORE
+        layout.setText(AssetLoader.font, String.valueOf(myBoard.getLevel()));
+        AssetLoader.font.draw(batcher, String.valueOf(myBoard.getLevel()), (30 - layout.width) / 2, 85);
+
+        layout.setText(AssetLoader.font, String.valueOf(myBoard.getGoal()));
+        AssetLoader.font.draw(batcher, String.valueOf(myBoard.getGoal()), (30 - layout.width) / 2, 110);
+
+        layout.setText(AssetLoader.font, String.valueOf(myBoard.getScore()));
+        AssetLoader.font.draw(batcher, String.valueOf(myBoard.getScore()), (30 - layout.width) / 2, 135);
+
+        // DRAW GAME STATES WHEN TRIGGERED
         if (myBoard.isReady()) {
             AssetLoader.font.draw(batcher, "READY", 70, (gameHeight / 2) - 10);
         }
@@ -129,7 +160,6 @@ public class GameRenderer {
         else if (myBoard.isGameOver()) {
             AssetLoader.font.draw(batcher, "GAME OVER", 60, (gameHeight / 2) - 10);
         }
-
 
         // End SpriteBatch
         batcher.end();

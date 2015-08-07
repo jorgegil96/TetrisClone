@@ -1,5 +1,7 @@
 package com.jorgegil.gameboard;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.jorgegil.boardobjects.Square;
 import com.jorgegil.boardobjects.Tetrominoe;
 import com.jorgegil.tgHelpers.AssetLoader;
@@ -21,16 +23,19 @@ public class GameBoard {
 
     private static final int LEVEL_GOAL = 10;
 
+
     private boolean[][] board, tetrominoeShape, tetriminoShape2;
     private ArrayList<Square> squares, tetrominoe, ghost;
-    private int num, score = 0, level = 0, goal = LEVEL_GOAL;
+    private int num, score = 0, highScore, level = 1, goal = LEVEL_GOAL;
     private int next1 = 0, next2 = 0, next3 = 0, next4 = 0, next5 = 0, next6 = 0, hold = -1;
     private ArrayList<Integer> nextShape;
     public GameState currentState;
+    private Preferences prefs;
 
     private boolean canHold = true;
 
     public GameBoard() {
+
         // Create and fill board with false values
         board = new boolean[20][10];
         for(int i = 0; i < board.length; i++) {
@@ -57,6 +62,9 @@ public class GameBoard {
         AssetLoader.music.pause();
 
         currentState = GameState.READY;
+
+        prefs = Gdx.app.getPreferences("My Preferences");
+        highScore = prefs.getInteger("highScore", 0);
     }
 
     public void update(float delta) {
@@ -106,6 +114,12 @@ public class GameBoard {
     public void endGame() {
         currentState = GameState.GAMEOVER;
         AssetLoader.music.pause();
+
+        if (score > highScore) {
+            prefs.putInteger("highScore", score);
+        }
+
+        prefs.flush();
     }
 
     public void updateReady(float delta) {
@@ -199,15 +213,6 @@ public class GameBoard {
         nextShape.add(next5);
         nextShape.add(next6);
 
-
-        //System.out.println(next1);
-        System.out.println(next2);
-        System.out.println(next3);
-        System.out.println(next4);
-        System.out.println(next5);
-        System.out.println(next6);
-
-        System.out.println("------------");
 
     }
 
@@ -539,6 +544,8 @@ public class GameBoard {
                     addScore(800 * (getLevel()));
                     break;
             }
+
+            System.out.println("score = " + score);
             if (getGoal() - numLines <= 0) {
                 setGoal(LEVEL_GOAL);
                 addLevel();
@@ -584,6 +591,10 @@ public class GameBoard {
 
     public void addScore(int increment) {
         score += increment;
+    }
+
+    public int getHighScore() {
+        return highScore;
     }
 
     public int getLevel() {
