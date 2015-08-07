@@ -3,6 +3,7 @@ package com.jorgegil.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.FPSLogger;
 import com.jorgegil.gameboard.GameBoard;
 import com.jorgegil.gameboard.GameRenderer;
 import com.jorgegil.tgHelpers.InputHandler;
@@ -15,8 +16,10 @@ public class GameScreen implements Screen{
     private GameBoard board;
     private GameRenderer renderer;
     InputHandler handler;
-    private float runTime = 0, dropTime = 1, moveTime = 0.15f, downTime = 0.15f, rotateTime = 0.1f,
+    private float runTime = 0, dropTime, moveTime = 0.15f, downTime = 0.15f, rotateTime = 0.1f,
             hardDropTime = 0.3f, pauseTime = 0.5f, holdTime = 0.3f;
+
+    private int level;
 
     public GameScreen() {
 
@@ -31,10 +34,14 @@ public class GameScreen implements Screen{
 
         handler = new InputHandler(board);
         Gdx.input.setInputProcessor(handler);
+
+        getDropTime();
+
     }
 
     @Override
     public void render(float delta) {
+
         runTime += delta;
         dropTime -= delta;
         moveTime -= delta;
@@ -94,6 +101,10 @@ public class GameScreen implements Screen{
                     holdTime = 0.3f;
                 }
             }
+            if(dropTime <= 0) {
+                board.update(delta);
+                getDropTime();
+            }
         }
         if (handler.pPressed) {
             if(pauseTime <= 0) {
@@ -111,12 +122,35 @@ public class GameScreen implements Screen{
             }
         }
 
-        if(dropTime <= 0) {
-            board.update(delta);
-            dropTime = 1;
+        renderer.render(runTime);
+    }
+
+    public void getDropTime() {
+
+        level = board.getLevel();
+
+        if (level <= 8) {
+            dropTime = (48.0f - (5.0f * level)) / 60.0f;
+        }
+        else if (level == 9) {
+            dropTime = 6.0f / 48.0f;
+        }
+        else if (level >= 10 && level <= 12) {
+            dropTime = 5.0f / 48.0f;
+        }
+        else if (level >= 13 && level <= 15) {
+            dropTime = 4.0f / 48.0f;
+        }
+        else if (level >= 16 && level <= 18) {
+            dropTime = 3.0f / 48.0f;
+        }
+        else if (level >= 19 && level <= 28) {
+            dropTime = 2.0f / 48.0f;
+        }
+        else {
+            dropTime = 1.0f / 60.0f;
         }
 
-        renderer.render(runTime);
     }
 
     @Override

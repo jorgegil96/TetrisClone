@@ -19,9 +19,11 @@ public class GameBoard {
         READY, RUNNING, PAUSE, GAMEOVER
     }
 
+    private static final int LEVEL_GOAL = 10;
+
     private boolean[][] board, tetrominoeShape, tetriminoShape2;
     private ArrayList<Square> squares, tetrominoe, ghost;
-    private int num, score = 0, level = 1, goal = 20;
+    private int num, score = 0, level = 0, goal = LEVEL_GOAL;
     private int next1 = 0, next2 = 0, next3 = 0, next4 = 0, next5 = 0, next6 = 0, hold = -1;
     private ArrayList<Integer> nextShape;
     public GameState currentState;
@@ -538,7 +540,7 @@ public class GameBoard {
                     break;
             }
             if (getGoal() - numLines <= 0) {
-                setGoal(20);
+                setGoal(LEVEL_GOAL);
                 addLevel();
             } else {
                 setGoal(getGoal() - numLines);
