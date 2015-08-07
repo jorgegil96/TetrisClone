@@ -92,6 +92,10 @@ public class GameRenderer {
             batcher.draw(AssetLoader.tetriminoImage.get(nextShape.get(i)), 135, veticalBar + 12 + (25 * i), 20, 20);
         }
 
+        if (myBoard.getHold() >= 0) {
+            batcher.draw(AssetLoader.tetriminoImage.get(myBoard.getHold()), 5, veticalBar + 12, 20, 20);
+        }
+
         for(Square s : squares) {
             batcher.draw(AssetLoader.colors.get(s.getColor()), s.getX() + 30, s.getY() + veticalBar, 10, 10);
         }

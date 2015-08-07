@@ -22,9 +22,11 @@ public class GameBoard {
     private boolean[][] board, tetrominoeShape, tetriminoShape2;
     private ArrayList<Square> squares, tetrominoe, ghost;
     private int num, score = 0, level = 1, goal = 20;
-    private int next1 = 0, next2 = 0, next3 = 0, next4 = 0, next5 = 0, next6 = 0;
+    private int next1 = 0, next2 = 0, next3 = 0, next4 = 0, next5 = 0, next6 = 0, hold = -1;
     private ArrayList<Integer> nextShape;
     public GameState currentState;
+
+    private boolean canHold = true;
 
     public GameBoard() {
         // Create and fill board with false values
@@ -46,6 +48,7 @@ public class GameBoard {
         for(int i = 0; i < 6; i++) {
             getNextTetrimino();
         }
+        getNextTetrimino();
         spawnTetrominoe();
 
         AssetLoader.music.loop();
@@ -134,7 +137,9 @@ public class GameBoard {
                 board[i][j] = true;
             }
             checkForLine();
+            getNextTetrimino();
             spawnTetrominoe();
+            canHold = true;
         }
     }
 
@@ -211,7 +216,8 @@ public class GameBoard {
         //Random rd = new Random();
         //num = rd.nextInt(7);
 
-        getNextTetrimino();
+
+
 
         // Gets new tetrominoe shape
         tetrominoeShape = Tetrominoe.getShape(next1);
@@ -249,6 +255,25 @@ public class GameBoard {
                 }
                 startJ = (10 - maxCol) / 2;
             }
+        }
+    }
+
+    public void hold() {
+
+        if (canHold) {
+            int x = next1;
+
+            if (hold >= 0) {
+                next1 = hold;
+            } else {
+                getNextTetrimino();
+            }
+
+            hold = x;
+
+            spawnTetrominoe();
+
+            canHold = false;
         }
     }
 
@@ -577,6 +602,10 @@ public class GameBoard {
 
     public ArrayList<Integer> getNextShape() {
         return nextShape;
+    }
+
+    public int getHold() {
+        return hold;
     }
 
     public void printBoard() {

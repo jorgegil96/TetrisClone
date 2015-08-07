@@ -10,7 +10,8 @@ import com.jorgegil.gameboard.GameBoard;
 public class InputHandler implements InputProcessor {
 
     private GameBoard myBoard;
-    public boolean rightPressed, leftPressed, downPressed, upPressed, zPressed, spacePressed, enterPressed, pPressed;
+    public boolean rightPressed, leftPressed, downPressed, upPressed, zPressed, spacePressed, enterPressed, pPressed,
+            shiftPressed;
 
     public InputHandler(GameBoard board) {
         myBoard = board;
@@ -43,6 +44,9 @@ public class InputHandler implements InputProcessor {
             case Input.Keys.P:
                 pPressed = true;
                 break;
+            case Input.Keys.SHIFT_LEFT:
+                shiftPressed = true;
+                break;
         }
         return true;
     }
@@ -73,6 +77,9 @@ public class InputHandler implements InputProcessor {
                 break;
             case Input.Keys.P:
                 pPressed = false;
+                break;
+            case Input.Keys.SHIFT_LEFT:
+                shiftPressed = false;
                 break;
         }
         return true;

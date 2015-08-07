@@ -13,10 +13,11 @@ import java.util.ArrayList;
  */
 public class AssetLoader {
 
-    public static Texture texture, tetriminoI, tetriminoO, tetriminoT, tetriminoJ, tetriminoL, tetriminoS, tetriminoZ;
+    public static Texture texture;
     public static TextureRegion pieceI, pieceO, pieceT, pieceJ, pieceL, pieceS, pieceZ, pieceG;
+    public static TextureRegion tetriminoI, tetriminoO, tetriminoT, tetriminoJ, tetriminoL, tetriminoS, tetriminoZ;
     public static ArrayList<TextureRegion> colors;
-    public static ArrayList<Texture> tetriminoImage;
+    public static ArrayList<TextureRegion> tetriminoImage;
     public static Sound music;
     public static BitmapFont font;
 
@@ -43,15 +44,19 @@ public class AssetLoader {
         colors.add(pieceZ);
         colors.add(pieceG);
 
-        tetriminoI = new Texture(Gdx.files.internal("data/i.png"));
-        tetriminoO = new Texture(Gdx.files.internal("data/o.png"));
-        tetriminoT = new Texture(Gdx.files.internal("data/t.png"));
-        tetriminoJ = new Texture(Gdx.files.internal("data/j.png"));
-        tetriminoL = new Texture(Gdx.files.internal("data/l.png"));
-        tetriminoS = new Texture(Gdx.files.internal("data/s.png"));
-        tetriminoZ = new Texture(Gdx.files.internal("data/z.png"));
+        tetriminoI = new TextureRegion(new Texture(Gdx.files.internal("data/i.png")), 0, 0, 100, 100);
+        tetriminoO = new TextureRegion(new Texture(Gdx.files.internal("data/o.png")), 0, 0, 100, 100);
+        tetriminoT = new TextureRegion(new Texture(Gdx.files.internal("data/t.png")), 0, 0, 100, 100);
+        tetriminoJ = new TextureRegion(new Texture(Gdx.files.internal("data/j.png")), 0, 0, 100, 100);
+        tetriminoJ.flip(false, true);
+        tetriminoL = new TextureRegion(new Texture(Gdx.files.internal("data/l.png")), 0, 0, 100, 100);
+        tetriminoL.flip(false, true);
+        tetriminoS = new TextureRegion(new Texture(Gdx.files.internal("data/s.png")), 0, 0, 100, 100);
+        tetriminoS.flip(true, false);
+        tetriminoZ = new TextureRegion(new Texture(Gdx.files.internal("data/z.png")), 0, 0, 100, 100);
+        tetriminoZ.flip(true, false);
 
-        tetriminoImage = new ArrayList<Texture>();
+        tetriminoImage = new ArrayList<TextureRegion>();
         tetriminoImage.add(tetriminoI);
         tetriminoImage.add(tetriminoO);
         tetriminoImage.add(tetriminoT);

@@ -16,7 +16,7 @@ public class GameScreen implements Screen{
     private GameRenderer renderer;
     InputHandler handler;
     private float runTime = 0, dropTime = 1, moveTime = 0.15f, downTime = 0.15f, rotateTime = 0.1f,
-            hardDropTime = 0.3f, pauseTime = 0.5f;
+            hardDropTime = 0.3f, pauseTime = 0.5f, holdTime = 0.3f;
 
     public GameScreen() {
 
@@ -42,6 +42,7 @@ public class GameScreen implements Screen{
         rotateTime -= delta;
         hardDropTime -= delta;
         pauseTime -= delta;
+        holdTime -= delta;
 
         if (board.isRunning()) {
             if (handler.leftPressed) {
@@ -85,6 +86,12 @@ public class GameScreen implements Screen{
                     board.hardDrop();
                     dropTime = 0;
                     hardDropTime = 0.3f;
+                }
+            }
+            if (handler.shiftPressed) {
+                if (holdTime <= 0) {
+                    board.hold();
+                    holdTime = 0.3f;
                 }
             }
         }
