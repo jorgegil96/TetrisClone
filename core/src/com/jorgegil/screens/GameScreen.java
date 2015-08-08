@@ -1,16 +1,16 @@
 package com.jorgegil.screens;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.jorgegil.gameboard.GameBoard;
 import com.jorgegil.gameboard.GameRenderer;
 import com.jorgegil.tgHelpers.InputHandler;
+import com.jorgegil.tgHelpers.TouchHandler;
 
 /**
  * Created by jorgegil on 7/27/15.
@@ -25,7 +25,11 @@ public class GameScreen implements Screen{
 
     private GameBoard board;
     private GameRenderer renderer;
+
     InputHandler handler;
+    TouchHandler touchHandler;
+    InputMultiplexer inputMultiplexer;
+
     private float runTime = 0, dropTime, moveTime = 0.15f, downTime = 0.15f, rotateTime = 0.1f,
             hardDropTime = 0.3f, pauseTime = 0.5f, holdTime = 0.3f;
 
@@ -36,14 +40,20 @@ public class GameScreen implements Screen{
         camera = new PerspectiveCamera();
         viewport = new FitViewport(MIN_SCENE_WIDTH, MIN_SCENE_HEIGHT, camera);
 
-        float gameHeight = 200;
-
-
         board = new GameBoard();
         renderer = new GameRenderer(board);
 
         handler = new InputHandler(board);
-        Gdx.input.setInputProcessor(handler);
+        touchHandler = new TouchHandler(board);
+
+        inputMultiplexer = new InputMultiplexer();
+        inputMultiplexer.addProcessor(handler);
+        inputMultiplexer.addProcessor(new GestureDetector(touchHandler));
+
+
+
+
+        Gdx.input.setInputProcessor(inputMultiplexer);
 
         getDropTime();
 
@@ -62,23 +72,23 @@ public class GameScreen implements Screen{
         holdTime -= delta;
 
         if (board.isRunning()) {
-            if (handler.leftPressed) {
-                if (!handler.rightPressed) {
+            if (handler.leftPressed || touchHandler.panLeft) {
+                if (!handler.rightPressed || !touchHandler.panRight) {
                     if (moveTime <= 0) {
                         board.moveLeft();
                         moveTime = 0.15f;
                     }
                 }
             }
-            if (handler.rightPressed) {
-                if (!handler.leftPressed) {
+            if (handler.rightPressed || touchHandler.panRight) {
+                if (!handler.leftPressed || !touchHandler.panLeft) {
                     if (moveTime <= 0) {
                         board.moveRight();
                         moveTime = 0.15f;
                     }
                 }
             }
-            if (handler.downPressed) {
+            if (handler.downPressed ||touchHandler.panDown) {
                 if (downTime <= 0) {
                     board.moveDown();
                     downTime = 0.15f;
@@ -98,18 +108,20 @@ public class GameScreen implements Screen{
                 }
 
             }
-            if (handler.spacePressed) {
+            if (handler.spacePressed || touchHandler.fling) {
                 if(hardDropTime <= 0) {
                     board.hardDrop();
                     dropTime = 0;
                     hardDropTime = 0.3f;
                 }
+                touchHandler.fling = false;
             }
-            if (handler.shiftPressed) {
+            if (handler.shiftPressed || touchHandler.shiftTap) {
                 if (holdTime <= 0) {
                     board.hold();
                     holdTime = 0.3f;
                 }
+                touchHandler.shiftTap = false;
             }
             if(dropTime <= 0) {
                 board.update(delta);
@@ -126,7 +138,7 @@ public class GameScreen implements Screen{
                 pauseTime = 0.5f;
             }
         }
-        if (handler.enterPressed) {
+        if (handler.enterPressed || touchHandler.tapStart) {
             if(board.isReady()) {
                 board.start();
             }

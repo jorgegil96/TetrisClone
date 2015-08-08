@@ -37,6 +37,8 @@ public class GameRenderer {
         batch = new SpriteBatch();
         batch.setProjectionMatrix(cam.combined);
 
+        System.out.println(Gdx.graphics.getWidth() + ", " + Gdx.graphics.getHeight());
+
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(cam.combined);
 

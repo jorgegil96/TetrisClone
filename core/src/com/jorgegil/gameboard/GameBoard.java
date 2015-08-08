@@ -32,9 +32,15 @@ public class GameBoard {
     public GameState currentState;
     private Preferences prefs;
 
+    public float gameWidth, gameHeight;
+
     private boolean canHold = true;
 
     public GameBoard() {
+
+        gameWidth = Gdx.graphics.getWidth();
+        gameHeight = (gameWidth * 200) / 160;
+
 
         // Create and fill board with false values
         board = new boolean[20][10];

@@ -2,6 +2,8 @@ package com.jorgegil.tgHelpers;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.math.Vector2;
 import com.jorgegil.gameboard.GameBoard;
 
 /**
@@ -12,6 +14,8 @@ public class InputHandler implements InputProcessor {
     private GameBoard myBoard;
     public boolean rightPressed, leftPressed, downPressed, upPressed, zPressed, spacePressed, enterPressed, pPressed,
             shiftPressed;
+
+    private Vector2 lastTouch = new Vector2();
 
     public InputHandler(GameBoard board) {
         myBoard = board;
@@ -82,7 +86,7 @@ public class InputHandler implements InputProcessor {
                 shiftPressed = false;
                 break;
         }
-        return true;
+        return false;
     }
 
     @Override
@@ -114,4 +118,5 @@ public class InputHandler implements InputProcessor {
     public boolean scrolled(int amount) {
         return false;
     }
+
 }
