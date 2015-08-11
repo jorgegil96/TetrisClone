@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class AssetLoader {
 
-    public static Texture texture;
+    public static Texture texture, title;
     public static TextureRegion pieceI, pieceO, pieceT, pieceJ, pieceL, pieceS, pieceZ, pieceG;
     public static TextureRegion tetriminoI, tetriminoO, tetriminoT, tetriminoJ, tetriminoL, tetriminoS, tetriminoZ;
     public static ArrayList<TextureRegion> colors;
@@ -24,6 +24,8 @@ public class AssetLoader {
     public static void load() {
         texture = new Texture(Gdx.files.internal("data/tetris.png"));
         texture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+
+        title = new Texture(Gdx.files.internal("data/title.png"));
 
         pieceI = new TextureRegion(texture, 150, 0, 25, 25);
         pieceO = new TextureRegion(texture, 50, 0, 25, 25);

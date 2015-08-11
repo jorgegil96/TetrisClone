@@ -15,7 +15,7 @@ import com.jorgegil.tgHelpers.TouchHandler;
 /**
  * Created by jorgegil on 7/27/15.
  */
-public class GameScreen implements Screen{
+public class GameScreen implements Screen {
 
     private static final float MIN_SCENE_WIDTH = 160.0f;
     private static final float MIN_SCENE_HEIGHT = 200.0f;
