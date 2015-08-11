@@ -40,7 +40,6 @@ public class TouchHandler implements GestureDetector.GestureListener {
                 shiftTap = true;
             } else {
                 myBoard.rotate(0);
-                System.out.println("rotate called");
             }
         }
 
@@ -55,7 +54,7 @@ public class TouchHandler implements GestureDetector.GestureListener {
 
     @Override
     public boolean fling(float velocityX, float velocityY, int button) {
-        if (velocityY > 300) {
+        if (velocityY > 400) {
             fling = true;
         }
         return false;
@@ -63,11 +62,12 @@ public class TouchHandler implements GestureDetector.GestureListener {
 
     @Override
     public boolean pan(float x, float y, float deltaX, float deltaY) {
-        if (!fling) {
+        if (deltaY < 5) {
             if (deltaX > 3) {
                 panLeft = false;
                 panRight = true;
-            } else if (deltaX < -3) {
+            }
+            else if (deltaX < -3) {
                 panRight = false;
                 panLeft = true;
             } else {
