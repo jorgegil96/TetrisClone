@@ -12,6 +12,6 @@ public class TetrisGame extends Game {
 	public void create () {
 		Gdx.app.log("ZBGame", "created");
 		AssetLoader.load();
-		setScreen(new MainMenu());
+		setScreen(new GameScreen());
 	}
 }

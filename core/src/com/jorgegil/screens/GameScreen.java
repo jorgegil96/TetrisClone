@@ -155,22 +155,22 @@ public class GameScreen implements Screen {
             dropTime = (48.0f - (5.0f * (level - 1))) / 60.0f;
         }
         else if (level == 9) {
-            dropTime = 6.0f / 48.0f;
+            dropTime = 11.0f / 48.0f;
         }
         else if (level >= 10 && level <= 12) {
-            dropTime = 5.0f / 48.0f;
+            dropTime = 10.0f / 48.0f;
         }
         else if (level >= 13 && level <= 15) {
-            dropTime = 4.0f / 48.0f;
+            dropTime = 9.0f / 48.0f;
         }
         else if (level >= 16 && level <= 18) {
-            dropTime = 3.0f / 48.0f;
+            dropTime = 8.0f / 48.0f;
         }
-        else if (level >= 19 && level <= 28) {
-            dropTime = 2.0f / 48.0f;
+        else if (level >= 19 && level <= 22) {
+            dropTime = 7.0f / 48.0f;
         }
         else {
-            dropTime = 1.0f / 60.0f;
+            dropTime = 6.0f / 60.0f;
         }
 
     }
