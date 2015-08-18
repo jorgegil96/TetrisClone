@@ -17,24 +17,28 @@ import java.util.Random;
 
 public class GameBoard {
 
+    public GameState currentState;
     public enum GameState {
         READY, RUNNING, PAUSE, GAMEOVER
     }
 
     private static final int LEVEL_GOAL = 10;
 
+    private int num, score = 0, highScore, level = 1, goal = LEVEL_GOAL;
+
+    private int next1 = 0, next2 = 0, next3 = 0, next4 = 0, next5 = 0, next6 = 0, hold = -1;
 
     private boolean[][] board, tetrominoeShape, tetriminoShape2;
     private ArrayList<Square> squares, tetrominoe, ghost;
-    private int num, score = 0, highScore, level = 1, goal = LEVEL_GOAL;
-    private int next1 = 0, next2 = 0, next3 = 0, next4 = 0, next5 = 0, next6 = 0, hold = -1;
     private ArrayList<Integer> nextShape;
-    public GameState currentState;
+
+    private float dropDelay, dropTimer = 0.0f, lockTimer = 0.0f, lockDelay = 0.5f;
+    private boolean canHold = true;
+
     private Preferences prefs;
 
     public float gameWidth, gameHeight;
 
-    private boolean canHold = true;
 
     public GameBoard() {
 
@@ -133,36 +137,47 @@ public class GameBoard {
     }
 
     public void updateRunning(float delta) {
+        dropTimer += delta;
+        updateDropTime();
+
         boolean pieceCanFall = true;
 
         // Checks if whole tetrominoe can fall
-        for(Square s : tetrominoe) {
-            if(!canSquareFall(s.getX(), s.getY()))
+        for (Square s : tetrominoe) {
+            if (!canSquareFall(s.getX(), s.getY()))
                 pieceCanFall = false;
         }
 
-         /* If true then increment Y by 10 on all 4 Squares
-           If false add squares from falling tetrominoe to non-falling squares ArrayList, update board and spawn new
-         */
-        if(pieceCanFall) {
-            for (Square s : tetrominoe)
-                if (canSquareFall(s.getX(), s.getY())) {
-                    s.fall();
-                    //System.out.println("fall");
-                }
-        }
-        else {
-            for (Square s : tetrominoe) {
-                squares.add(new Square(s.getX(), s.getY(), s.getColor()));
-                int i = (int) s.getY() / 10;
-                int j = (int) s.getX() / 10;
-                board[i][j] = true;
+
+             /* If true then increment Y by 10 on all 4 Squares
+               If false add squares from falling tetrominoe to non-falling squares ArrayList, update board and spawn new
+             */
+        if (pieceCanFall) {
+            if (dropTimer >= dropDelay) {
+                for (Square s : tetrominoe)
+                    if (canSquareFall(s.getX(), s.getY()))
+                        s.fall();
+                dropTimer = 0;
             }
-            checkForLine();
-            getNextTetrimino();
-            spawnTetrominoe();
-            canHold = true;
+        } else {
+            lockTimer += delta;
+            if (lockTimer >= lockDelay) {
+                for (Square s : tetrominoe) {
+                    squares.add(new Square(s.getX(), s.getY(), s.getColor()));
+                    int i = (int) s.getY() / 10;
+                    int j = (int) s.getX() / 10;
+                    board[i][j] = true;
+                }
+
+                checkForLine();
+                getNextTetrimino();
+                spawnTetrominoe();
+                canHold = true;
+
+                lockTimer = 0;
+            }
         }
+
     }
 
     public ArrayList<Square> getSquares() {
@@ -320,6 +335,7 @@ public class GameBoard {
     }
 
     public void moveLeft() {
+
         boolean pieceCanMoveLeft = true;
 
         // Checks if whole tetrominoe can move left
@@ -390,6 +406,8 @@ public class GameBoard {
                 }
             }
         }
+
+        lockTimer = lockDelay;
     }
 
     public void rotate(int w) { // 0 -> CW, 1 -> CCW
@@ -551,7 +569,6 @@ public class GameBoard {
                     break;
             }
 
-            System.out.println("score = " + score);
             if (getGoal() - numLines <= 0) {
                 setGoal(LEVEL_GOAL);
                 addLevel();
@@ -625,6 +642,20 @@ public class GameBoard {
 
     public int getHold() {
         return hold;
+    }
+
+    public void updateDropTime() {
+        if (level <= 8)                         dropDelay = (48.0f - (5.0f * (level - 1))) / 60.0f;
+        else if (level == 9)                    dropDelay = 11.0f / 48.0f;
+        else if (level >= 10 && level <= 12)    dropDelay = 10.0f / 48.0f;
+        else if (level >= 13 && level <= 15)    dropDelay = 9.0f / 48.0f;
+        else if (level >= 16 && level <= 18)    dropDelay = 8.0f / 48.0f;
+        else if (level >= 19 && level <= 22)    dropDelay = 7.0f / 48.0f;
+        else                                    dropDelay = 6.0f / 60.0f;
+    }
+
+    public void resetLock() {
+        lockTimer = 0;
     }
 
     public void printBoard() {

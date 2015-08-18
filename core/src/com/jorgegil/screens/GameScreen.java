@@ -30,10 +30,9 @@ public class GameScreen implements Screen {
     TouchHandler touchHandler;
     InputMultiplexer inputMultiplexer;
 
-    private float runTime = 0, dropTime, moveTime = 0.15f, downTime = 0.15f, rotateTime = 0.1f,
+    private float runTime = 0, moveTime = 0.10f, downTime = 0.10f, rotateTime = 0.1f,
             hardDropTime = 0.3f, pauseTime = 0.5f, holdTime = 0.3f;
 
-    private int level;
 
     public GameScreen() {
 
@@ -55,7 +54,6 @@ public class GameScreen implements Screen {
 
         Gdx.input.setInputProcessor(inputMultiplexer);
 
-        getDropTime();
 
     }
 
@@ -63,7 +61,6 @@ public class GameScreen implements Screen {
     public void render(float delta) {
 
         runTime += delta;
-        dropTime -= delta;
         moveTime -= delta;
         downTime -= delta;
         rotateTime -= delta;
@@ -71,12 +68,17 @@ public class GameScreen implements Screen {
         pauseTime -= delta;
         holdTime -= delta;
 
+        board.update(delta);
+
+
+
         if (board.isRunning()) {
             if (handler.leftPressed || touchHandler.panLeft) {
                 if (!handler.rightPressed || !touchHandler.panRight) {
                     if (moveTime <= 0) {
                         board.moveLeft();
-                        moveTime = 0.15f;
+                        board.resetLock();
+                        moveTime = 0.10f;
                     }
                 }
             }
@@ -84,19 +86,21 @@ public class GameScreen implements Screen {
                 if (!handler.leftPressed || !touchHandler.panLeft) {
                     if (moveTime <= 0) {
                         board.moveRight();
-                        moveTime = 0.15f;
+                        board.resetLock();
+                        moveTime = 0.10f;
                     }
                 }
             }
             if (handler.downPressed ||touchHandler.panDown) {
                 if (downTime <= 0) {
                     board.moveDown();
-                    downTime = 0.15f;
+                    downTime = 0.10f;
                 }
             }
             if (handler.upPressed) {
                 if (rotateTime <= 0) {
                     board.rotate(0);
+                    board.resetLock();
                     rotateTime = 0.1f;
                 }
 
@@ -104,6 +108,7 @@ public class GameScreen implements Screen {
             if (handler.zPressed) {
                 if (rotateTime <= 0) {
                     board.rotate(1);
+                    board.resetLock();
                     rotateTime = 0.1f;
                 }
 
@@ -111,7 +116,6 @@ public class GameScreen implements Screen {
             if (handler.spacePressed || touchHandler.fling) {
                 if(hardDropTime <= 0) {
                     board.hardDrop();
-                    dropTime = 0;
                     hardDropTime = 0.3f;
                 }
                 touchHandler.fling = false;
@@ -122,10 +126,6 @@ public class GameScreen implements Screen {
                     holdTime = 0.3f;
                 }
                 touchHandler.shiftTap = false;
-            }
-            if(dropTime <= 0) {
-                board.update(delta);
-                getDropTime();
             }
         }
         if (handler.pPressed) {
@@ -145,34 +145,6 @@ public class GameScreen implements Screen {
         }
 
         renderer.render(runTime);
-    }
-
-    public void getDropTime() {
-
-        level = board.getLevel();
-
-        if (level <= 8) {
-            dropTime = (48.0f - (5.0f * (level - 1))) / 60.0f;
-        }
-        else if (level == 9) {
-            dropTime = 11.0f / 48.0f;
-        }
-        else if (level >= 10 && level <= 12) {
-            dropTime = 10.0f / 48.0f;
-        }
-        else if (level >= 13 && level <= 15) {
-            dropTime = 9.0f / 48.0f;
-        }
-        else if (level >= 16 && level <= 18) {
-            dropTime = 8.0f / 48.0f;
-        }
-        else if (level >= 19 && level <= 22) {
-            dropTime = 7.0f / 48.0f;
-        }
-        else {
-            dropTime = 6.0f / 60.0f;
-        }
-
     }
 
     @Override
