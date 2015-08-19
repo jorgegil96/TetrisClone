@@ -112,15 +112,15 @@ public class GameRenderer {
         }
 
         for(Square s : squares) {
-            batch.draw(AssetLoader.colors.get(s.getColor()), s.getX() + 30, s.getY(), 10, 10);
+            batch.draw(AssetLoader.colors.get(s.getColor()), s.getX() * 10 + 30, s.getY() * 10, 10, 10);
         }
 
         for (Square s : ghost) {
-            batch.draw(AssetLoader.colors.get(7), s.getX() + 30, s.getY(), 10, 10);
+            batch.draw(AssetLoader.colors.get(7), s.getX() * 10 + 30, s.getY() * 10, 10, 10);
         }
 
         for(Square s : tetrominoe) {
-            batch.draw(AssetLoader.colors.get(s.getColor()), s.getX() + 30, s.getY(), 10, 10);
+            batch.draw(AssetLoader.colors.get(s.getColor()), s.getX() * 10 + 30, s.getY() * 10, 10, 10);
         }
 
         // DRAW STATIC TEXT

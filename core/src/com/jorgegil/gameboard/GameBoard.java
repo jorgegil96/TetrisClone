@@ -61,11 +61,13 @@ public class GameBoard {
         // Ghost contains ghost squares
         ghost = new ArrayList<Square>();
 
+        // contains int that correspond to tetrominos shapes
         nextShape = new ArrayList<Integer>();
         for(int i = 0; i < 6; i++) {
             getNextTetrimino();
         }
         getNextTetrimino();
+
         spawnTetrominoe();
 
         AssetLoader.music.loop();
@@ -150,7 +152,7 @@ public class GameBoard {
 
 
              /* If true then increment Y by 10 on all 4 Squares
-               If false add squares from falling tetrominoe to non-falling squares ArrayList, update board and spawn new
+               If false add squares from falling tetromino to non-falling squares ArrayList, update board and spawn new
              */
         if (pieceCanFall) {
             if (dropTimer >= dropDelay) {
@@ -164,8 +166,8 @@ public class GameBoard {
             if (lockTimer >= lockDelay) {
                 for (Square s : tetrominoe) {
                     squares.add(new Square(s.getX(), s.getY(), s.getColor()));
-                    int i = (int) s.getY() / 10;
-                    int j = (int) s.getX() / 10;
+                    int i = s.getY();
+                    int j = s.getX();
                     board[i][j] = true;
                 }
 
@@ -193,10 +195,10 @@ public class GameBoard {
         boolean pieceCanMoveDown = true;
 
         for (Square s : tetrominoe) {
-            int x = (int) s.getX();
-            int y = (int) s.getY();
+            int j = s.getX();
+            int i = s.getY();
             int num = s.getColor();
-            ghost.add(new Square(x, y, num));
+            ghost.add(new Square(j, i, num));
         }
 
         while (pieceCanMoveDown) {
@@ -240,26 +242,15 @@ public class GameBoard {
     public void spawnTetrominoe() {
         tetrominoe.clear();
 
-        // Random num (0 - 6) to choose Shape and Color of new tetrominoe
-        //Random rd = new Random();
-        //num = rd.nextInt(7);
 
-
-
-
-        // Gets new tetrominoe shape
+        // Gets new tetrominoe shape (boolean array representing the piece)
         tetrominoeShape = Tetrominoe.getShape(next1);
         tetriminoShape2 = new boolean[tetrominoeShape.length][tetrominoeShape.length];
         copyArray();
 
-        int maxCol = 0;
-        //gets max # of cols
-        for(int i = 0; i < tetrominoeShape.length; i++)
-            if(tetrominoeShape[i].length > maxCol)
-                maxCol = tetrominoeShape[i].length;
 
-
-        int startJ = (10 - maxCol) / 2;
+        // Starting board coordinates
+        int startJ = (10 - tetrominoeShape.length) / 2;
         int startI = 0;
 
         // Gets spawn coordinates and adds new Squares to tetrominoe ArrayList (4)
@@ -268,20 +259,16 @@ public class GameBoard {
                 startJ += j;
                 startI = i;
 
-                int startX = startJ * 10;
-                int startY = startI * 10;
-
-
 
                 if(tetrominoeShape[i][j]) {
                     if (!board[startI][startJ]) {
-                        tetrominoe.add(new Square(startX, startY, next1));
+                        tetrominoe.add(new Square(startJ, startI, next1));
                     }
                     else {
                         endGame();
                     }
                 }
-                startJ = (10 - maxCol) / 2;
+                startJ = (10 - tetrominoeShape.length) / 2;
             }
         }
     }
@@ -317,17 +304,13 @@ public class GameBoard {
 
         if(pieceCanMoveRight) {
             for (Square s : tetrominoe) {
-                s.move(10);
+                s.move(1);
             }
 
         }
     }
 
-    public boolean canSquareMoveRight(float x, float y) {
-        // Convert x and y to j and i
-        int j = (int) x / 10;
-        int i = (int) y / 10;
-
+    public boolean canSquareMoveRight(int j, int i) {
         if(j == 9)
             return false;
 
@@ -347,16 +330,12 @@ public class GameBoard {
 
         if(pieceCanMoveLeft) {
             for (Square s : tetrominoe) {
-                s.move(-10);
+                s.move(-1);
             }
         }
     }
 
-    public boolean canSquareMoveLeft(float x, float y) {
-        // Convert x and y to j and i
-        int j = (int) x / 10;
-        int i = (int) y / 10;
-
+    public boolean canSquareMoveLeft(int j, int i) {
         if(j == 0)
             return false;
 
@@ -366,7 +345,7 @@ public class GameBoard {
     public void moveDown() {
         boolean pieceCanMoveDown = true;
 
-        // Checks if whole tetrominoe can move left
+        // Checks if whole tetrominoe can move down
         for(Square s : tetrominoe) {
             if(!canSquareFall(s.getX(), s.getY())) {
                 pieceCanMoveDown = false;
@@ -380,11 +359,7 @@ public class GameBoard {
         }
     }
 
-    public boolean canSquareFall(float x, float y) {
-        //convert x and y to j and i
-        int j = (int) x / 10;
-        int i = (int) y / 10;
-
+    public boolean canSquareFall(int j, int i) {
         if(i == 19)
             return false;
 
@@ -428,44 +403,54 @@ public class GameBoard {
             }
         }
 
+        // ROTATE SHAPE
         transpose();
         if(w == 0) reverseRow(); // Clockwise
         else reverseCol();       // Counter Clock Wise
 
         int count = 0;
+
         // Iterates new rotated shape
         for (int i = 0; i < tetriminoShape2.length; i++) {
             for (int j = 0; j < tetriminoShape2[i].length; j++) {
                 if (tetriminoShape2[i][j]) { // if cell is true
 
                     // previous shape coordinates
-                    int prevI = (int) coordinates.get(count).getX();
-                    int prevJ = (int) coordinates.get(count).getY();
-
-                    // difference between new and previous coordinates of cell
-                    int difI = i - prevI;
-                    int difJ = j - prevJ;
+                    int prevI = coordinates.get(count).getX();
+                    int prevJ = coordinates.get(count).getY();
 
                     // new coordinates of shape
-                    int newI = prevI + difI;
-                    int newJ = prevJ + difJ;
+                    int newI = i;
+                    int newJ = j;
+
+                    // difference between new and previous coordinates of cell
+                    int difI = newI - prevI;
+                    int difJ = newJ - prevJ;
+
+                    System.out.println("Prev   i = " + prevI + ", j = " + prevJ);
+                    System.out.println("Neww   i = " + newI + ", j = " + newJ);
+                    System.out.println("Diff   i = " + difI + ", j = " + difJ);
 
                     // new coordinates of square
-                    int fixedI = (int) (tetrominoe.get(count).getY() / 10) + difI;
-                    int fixedJ = (int) (tetrominoe.get(count).getX() / 10) + difJ;
+                    int fixedI = (tetrominoe.get(count).getY()) + difI;
+                    int fixedJ = (tetrominoe.get(count).getX()) + difJ;
+
+                    System.out.println("Fixed   j = " + fixedJ + ", i = " + fixedI);
 
                     // check if new coordinates of square are valid, if not set rotate to false
                     if(fixedJ < 0 || fixedJ > 9 || fixedI < 0 || fixedI > 19) { // check for border collision
                         pieceCanRotate = false;
+                        System.out.println("Border collition");
                     }
                     else {
-                        if (board[newI][newJ]) { //check for neighboring squares collision
+                        if (board[fixedI][fixedJ]) { //check for neighboring squares collision
                             pieceCanRotate = false;
+                            System.out.println("Neighboring collition");
                         }
                     }
 
                     // Add the difference of square coordinates to arraylist
-                    difCoordinates.add(new Point(difI * 10, difJ * 10));
+                    difCoordinates.add(new Point(difI, difJ));
 
                     count++;
                 }
@@ -474,11 +459,12 @@ public class GameBoard {
 
         int count2 = 0;
         if(pieceCanRotate) {
+            System.out.println("Rotation");
             for (Square s : tetrominoe) {
 
                 //get difference to add/substract to square
-                int difJ = (int) difCoordinates.get(count2).getX();
-                int difI = (int) difCoordinates.get(count2).getY();
+                int difJ = difCoordinates.get(count2).getX();
+                int difI = difCoordinates.get(count2).getY();
 
                 s.rotate(difI, difJ);
                 count2++;
