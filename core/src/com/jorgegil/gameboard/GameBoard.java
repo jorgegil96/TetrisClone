@@ -595,7 +595,7 @@ public class GameBoard {
          */
         for (Iterator<Square> it = squares.iterator(); it.hasNext(); ) {
             Square s = it.next();
-            int i = (int) s.getY() / 10;
+            int i = s.getY();
 
             if(i < line) {
                 s.fall();
