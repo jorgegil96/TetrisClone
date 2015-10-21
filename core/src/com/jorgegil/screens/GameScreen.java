@@ -141,6 +141,8 @@ public class GameScreen implements Screen {
         if (handler.enterPressed || touchHandler.tapStart) {
             if(board.isReady()) {
                 board.start();
+            } else if (board.isGameOver()) {
+                board.restart();
             }
         }
 

@@ -25,9 +25,9 @@ public class GameBoard {
 
     private static final int LEVEL_GOAL = 10;
 
-    private int num, score = 0, highScore, level = 1, goal = LEVEL_GOAL;
+    private int num, score, highScore, level, goal;
 
-    private int next1 = 0, next2 = 0, next3 = 0, next4 = 0, next5 = 0, next6 = 0, hold = -1;
+    private int next1, next2, next3, next4, next5, next6, hold;
 
     private boolean[][] board, tetrominoeShape, tetriminoShape2;
     private ArrayList<Square> squares, tetrominoe, ghost;
@@ -36,7 +36,7 @@ public class GameBoard {
     private int curP;
 
     private float dropDelay, dropTimer = 0.0f, lockTimer = 0.0f, lockDelay = 0.5f;
-    private boolean canHold = true;
+    private boolean canHold;
 
     private Preferences prefs;
 
@@ -56,6 +56,8 @@ public class GameBoard {
                 board[i][j] = false;
             }
         }
+
+        startVariables();
 
         // squares contains all non-falling squares
         squares = new ArrayList<Square>();
@@ -121,6 +123,41 @@ public class GameBoard {
         AssetLoader.music.resume();
     }
 
+    public void restart() {
+        // Create and fill board with false values
+        for(int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                board[i][j] = false;
+            }
+        }
+
+        startVariables();
+
+        // squares contains all non-falling squares
+        squares.clear();
+        // tetrominoe contains current falling squares
+        tetrominoe.clear();
+        // Ghost contains ghost squares
+        ghost.clear();
+
+        // contains int that correspond to tetrominos shapes
+        nextShape.clear();
+        for(int i = 0; i < 6; i++) {
+            getNextTetrimino();
+        }
+        getNextTetrimino();
+
+        spawnTetrominoe();
+
+        canHold = true;
+
+        currentState = GameState.RUNNING;
+        AssetLoader.music.loop();
+
+        prefs = Gdx.app.getPreferences("My Preferences");
+        highScore = prefs.getInteger("highScore", 0);
+    }
+
     public void stop() {
         currentState = GameState.PAUSE;
         AssetLoader.music.pause();
@@ -128,7 +165,7 @@ public class GameBoard {
 
     public void endGame() {
         currentState = GameState.GAMEOVER;
-        AssetLoader.music.pause();
+        AssetLoader.music.stop();
 
         if (score > highScore) {
             prefs.putInteger("highScore", score);
@@ -652,6 +689,20 @@ public class GameBoard {
 
     public int getHold() {
         return hold;
+    }
+
+    public void startVariables() {
+        next1 = 0;
+        next2 = 0;
+        next3 = 0;
+        next4 = 0;
+        next5 = 0;
+        next6 = 0;
+        hold = -1;
+        level = 1;
+        canHold = true;
+        score = 0;
+        goal = LEVEL_GOAL;
     }
 
     public void updateDropTime() {

@@ -26,7 +26,8 @@ public class GameRenderer {
 
     GlyphLayout layout;
 
-    private final float HOLD_W, NEXT_W, LEVEL_W, SCORE_W, HIGH_W, GOAL_W, HIGH_SCORE_W;
+    private final float HOLD_W, NEXT_W, LEVEL_W, SCORE_W, HIGH_W, GOAL_W, HIGH_SCORE_W,
+            RESTART_W, GAME_OVER_W, READY_W, PAUSED_W;
 
     public GameRenderer(GameBoard board) {
         myBoard = board;
@@ -58,6 +59,14 @@ public class GameRenderer {
         GOAL_W = layout.width;
         layout.setText(AssetLoader.font, String.valueOf(myBoard.getHighScore()));
         HIGH_SCORE_W = layout.width;
+        layout.setText(AssetLoader.font, "GAME OVER");
+        GAME_OVER_W = layout.width;
+        layout.setText(AssetLoader.font, "READY");
+        READY_W = layout.width;
+        layout.setText(AssetLoader.font, "PAUSED");
+        PAUSED_W = layout.width;
+        layout.setText(AssetLoader.font, "TOUCH TO RESTART");
+        RESTART_W = layout.width;
 
     }
 
@@ -146,13 +155,14 @@ public class GameRenderer {
 
         // DRAW GAME STATES WHEN TRIGGERED
         if (myBoard.isReady()) {
-            AssetLoader.font.draw(batch, "READY", 70, 90);
+            AssetLoader.font.draw(batch, "READY", (160 - READY_W) / 2, 90);
         }
         else if (myBoard.isPaused()) {
-            AssetLoader.font.draw(batch, "PAUSED", 70, 90);
+            AssetLoader.font.draw(batch, "PAUSED", (160 - PAUSED_W) / 2, 90);
         }
         else if (myBoard.isGameOver()) {
-            AssetLoader.font.draw(batch, "GAME OVER", 60, 90);
+            AssetLoader.font.draw(batch, "GAME OVER", (160 - GAME_OVER_W) / 2, 90);
+            AssetLoader.font.draw(batch, "TOUCH TO RESTART", (160 - RESTART_W) / 2, 110);
         }
 
         // End SpriteBatch
