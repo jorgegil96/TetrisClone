@@ -2,4 +2,9 @@
 <!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit trunk//EN" "http://google-web-toolkit.googlecode.com/svn/trunk/distro-source/core/src/gwt-module.dtd">
 <module>
 	<source path="com/jorgegil/tetris" />
+	<source path="com/jorgegil/boardobjects" />
+	<source path="com/jorgegil/extraclasses" />
+	<source path="com/jorgegil/gameboard" />
+	<source path="com/jorgegil/screens" />
+	<source path="com/jorgegil/tgHelpers" />
 </module>
