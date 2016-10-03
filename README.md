@@ -10,10 +10,10 @@ Platforms:
 - Desktop
   - Windows
   - OSX
-  - Linux (not tested)
+  - Linux
 - Mobile
-  - Android (not tested)
-  - iOS (not tested)
-- HTML5 (not tested)
+  - Android
+  - iOS
+- HTML5
 
 
